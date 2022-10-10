@@ -1,0 +1,45 @@
+root: true
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - "@antfu"
+rules:
+  "@typescript-eslint/explicit-module-boundary-types":
+    - error
+    - allowArgumentsExplicitlyTypedAsAny: true
+  "@typescript-eslint/quotes":
+    - error
+    - double
+  "@typescript-eslint/semi":
+    - error
+    - always
+  "@typescript-eslint/indent":
+    - error
+    - 4
+  "@typescript-eslint/comma-dangle":
+    - error
+    - never
+  "@typescript-eslint/brace-style":
+    - error
+    - 1tbs
+  "max-len": ["error", { "code": 100 }]
+  "indent": ["error", 4]
+  "semi": ["error", "always"]
+  "quotes": ["error", "double"]
+  "comma-dangle": ["error", "never"]
+  "arrow-parens": ["error", "as-needed"]
+  "linebreak-style": 0
+  "no-console": "off"
+  "no-trailing-spaces": "error"
+  "no-unused-vars": "warn"
+  "brace-style": ["error", "1tbs"]
+  "object-curly-spacing": ["error", "always"]
+  "array-bracket-spacing": ["error", "never"]
+  "space-in-parens": ["error", "never"]
+  "space-before-blocks": ["error", "always"]
+  "keyword-spacing": ["error", { "before": true, "after": true }]
+  "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }]
+  "curly": ["error", "all"]
