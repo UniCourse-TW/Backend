@@ -1,6 +1,6 @@
 # 🦄 UniCourse Backend
 
-The backend of UniCourse, an open-sourced modern course platform for students.
+🦄 The backend of UniCourse, an open-sourced modern course platform for students.
 
 ## Development
 
