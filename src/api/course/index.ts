@@ -13,7 +13,7 @@ const query = z.object({
     q: z.string().min(1)
 });
 
-router.get("/query", async ctx => {
+router.get("/", async ctx => {
     try {
         const { year, term, q } = query.parse(ctx.query);
 
