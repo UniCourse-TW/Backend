@@ -1,20 +1,24 @@
-import express from "express";
+
+import Router from "@koa/router";
 import { prisma } from "@/prisma";
+import { Err, Ok } from "@/response";
 
-const router = express.Router();
+const router = new Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async ctx => {
     try {
         await prisma.$connect();
 
-        res.json({
+        Ok(ctx, {
             server: "ok",
             database: "ok"
         });
     } catch {
-        res.status(500).json({
-            server: "ok",
-            database: "error"
+        Err(ctx, "Not Healthy", {
+            data: {
+                server: "ok",
+                database: "error"
+            }
         });
     }
 });
