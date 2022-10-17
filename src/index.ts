@@ -22,7 +22,7 @@ server
                 Err(ctx, "我們在這找不到任何東西 QQ", { code: 404 });
             } else {
                 const time = Date.now() - start_t;
-                console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${time}ms`);
+                console.log(`${ctx.method} ${decodeURIComponent(ctx.url)} ${ctx.status} ${time}ms`);
                 ctx.set("X-Response-Time", time.toString());
             }
         } catch (err) {
