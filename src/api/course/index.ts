@@ -1,6 +1,7 @@
 import Router from "@koa/router";
 import { z } from "zod";
 import debug from "debug";
+import key from "./key";
 import { prisma } from "@/prisma";
 import { Err, Ok } from "@/response";
 import { date2term } from "@/utils";
@@ -60,6 +61,7 @@ router.get("/", async ctx => {
     }
 });
 
+router.use("/:id", key.routes());
 export default router;
 
 function parse_query(q: string): { school: string; year: number; term: number; key: string[] } {
