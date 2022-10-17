@@ -18,11 +18,11 @@ server
             const start_t = Date.now();
 
             await next();
-            if (ctx.status === 404) {
+            if (ctx.status === 404 && ctx.body === undefined) {
                 Err(ctx, "我們在這找不到任何東西 QQ", { code: 404 });
             } else {
                 const time = Date.now() - start_t;
-                console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${time}ms`);
+                console.log(`${ctx.method} ${decodeURIComponent(ctx.url)} ${ctx.status} ${time}ms`);
                 ctx.set("X-Response-Time", time.toString());
             }
         } catch (err) {
