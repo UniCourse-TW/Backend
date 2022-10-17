@@ -18,7 +18,7 @@ server
             const start_t = Date.now();
 
             await next();
-            if (ctx.status === 404) {
+            if (ctx.status === 404 && ctx.body === undefined) {
                 Err(ctx, "我們在這找不到任何東西 QQ", { code: 404 });
             } else {
                 const time = Date.now() - start_t;
