@@ -1,10 +1,11 @@
-import express from "express";
+import Router from "@koa/router";
 import { z } from "zod";
 import debug from "debug";
 import { prisma } from "@/prisma";
+import { Err, Ok } from "@/response";
 
 const log = debug("api:course");
-const router = express.Router();
+const router = new Router();
 
 const query = z.object({
     year: z.string().transform(year => parseInt(year)).refine(year => year >= 107 && year <= 111),
@@ -12,9 +13,9 @@ const query = z.object({
     q: z.string().min(1)
 });
 
-router.get("/query", async (req, res) => {
+router.get("/", async ctx => {
     try {
-        const { year, term, q } = query.parse(req.query);
+        const { year, term, q } = query.parse(ctx.query);
 
         log("Querying courses", year, term, q);
         const courses = await prisma.course.findMany({
@@ -36,12 +37,12 @@ router.get("/query", async (req, res) => {
         });
         log("Querying courses done", courses.length);
 
-        res.json({ data: courses });
+        Ok(ctx, courses);
     } catch (error) {
         if (error instanceof z.ZodError) {
-            res.status(400).json({ error: error.message });
+            Err(ctx, error.message, { code: 400 });
         } else {
-            res.status(500).json({ error: "Internal server error" });
+            Err(ctx, "Internal server error");
         }
     }
 });
