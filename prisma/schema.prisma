@@ -87,6 +87,7 @@ enum CourseType {
   Compulsory
   Elective
   General
+  Other
 }
 
 // Course End
@@ -129,33 +130,24 @@ model CourseProgram {
 }
 
 model Course {
-  id               String          @id @default(cuid())
-  year             Int
-  term             Int
-  name             String
-  description      String
-  teachers         Teacher[]
-  code             String
-  type             CourseType
-  grade            Int?
-  credit           Int
-  serial           Int
-  group            String
-  quota_limit      Int
-  quota_additional Int
-  schedule         Json
-  programs         CourseProgram[]
-  comment          String
-  restrict         String
-  hours            Int
-  goals            String[]
-  syllabus         String
-  methodologies    Json
-  grading          Json
-  prerequisite     String
-  general_core     String[]
-  Entity           Entity          @relation(fields: [entity_id], references: [id])
-  entity_id        String
+  id            String          @id @default(cuid())
+  year          Int
+  term          Int
+  name          String
+  description   String
+  code          String
+  type          CourseType
+  grade         Int?
+  credit        Int
+  schedule      Json
+  extra         Json
+  entity        Entity          @relation(fields: [entity_id], references: [id])
+  entity_id     String
+  programs      CourseProgram[]
+  teachers      Teacher[]
+  prerequisites Course[]        @relation("PrerequisiteToCourse")
+  advanced      Course?         @relation("PrerequisiteToCourse", fields: [advanced_id], references: [id])
+  advanced_id   String?
 }
 
 // Entity End
