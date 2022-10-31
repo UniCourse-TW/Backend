@@ -4,7 +4,7 @@ import Router from "@koa/router";
 import { BACKEND_PORT } from "@/config";
 import { Err } from "@/response";
 import health from "@/api/health";
-import course from "@/api/course";
+import courses from "@/api/courses";
 
 const server = new Koa().use(body());
 
