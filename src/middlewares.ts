@@ -1,14 +1,19 @@
 import type { Context, Next } from "koa";
-import { verify } from "@unicourse-tw/token";
 import cuid from "cuid";
+import debug from "debug";
+import { verify } from "@unicourse-tw/token";
 import { Err } from "@/response";
 import { prisma } from "@/prisma";
+
+const guard_log = debug("middleware:guard");
 
 export async function guard(ctx: Context, next: Next): Promise<void> {
     const token = ctx.request.headers.authorization?.split(" ")[1];
 
     try {
+        guard_log("verifying token", token);
         verify(token ?? "");
+        guard_log("token verified");
     } catch {
         Err(ctx, "Invalid token", { code: 401 });
         return;
