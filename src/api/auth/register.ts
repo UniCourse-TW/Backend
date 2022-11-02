@@ -3,7 +3,7 @@ import { z } from "zod";
 import debug from "debug";
 import argon from "argon2";
 import { Err, Ok } from "@/response";
-import { db } from "@/mem";
+import { prisma } from "@/prisma";
 
 const log = debug("api:auth:register");
 
@@ -19,9 +19,10 @@ router.post("/register", async ctx => {
     try {
         const { username, password, email } = schema.parse(ctx.request.body);
 
-        const account = db.accounts.find(
-            account => account.username === username || account.email === email
-        );
+        const account = await prisma.userSnapshot.findFirst({
+            where: { username, revoked: false },
+            orderBy: { id: "desc" }
+        });
 
         if (account) {
             log("Account already exists");
@@ -31,19 +32,35 @@ router.post("/register", async ctx => {
 
         const hash = await argon.hash(password);
 
-        const user = {
-            username,
-            password: hash,
-            email
-        };
+        const user = await prisma.user.create({ data: {} });
 
-        db.accounts.push(user);
-        db.profiles[user.username] = {
-            username: user.username,
-            name: user.username,
-            bio: "Nothing",
-            avatar: "https://placekitten.com/200/200"
-        };
+        await prisma.userSnapshot.create({
+            data: {
+                user: { connect: { id: user.id } },
+                email: {
+                    connectOrCreate: {
+                        where: { email },
+                        create: { email }
+                    }
+                },
+                username,
+                password: hash
+            }
+        });
+
+        await prisma.userProfile.create({
+            data: {
+                user: { connect: { id: user.id } },
+                name: username,
+                bio: `Hello! I'm ${username}!`,
+                school: "",
+                email: "",
+                location: "",
+                banner: "",
+                avatar: "https://placekitten.com/200/200",
+                extra: {}
+            }
+        });
 
         Ok(ctx, { username, email });
     } catch (err) {

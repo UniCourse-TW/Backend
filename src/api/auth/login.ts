@@ -1,11 +1,12 @@
 import Router from "@koa/router";
+import type { Token } from "@unicourse-tw/token";
+import { sign } from "@unicourse-tw/token";
 import { z } from "zod";
 import debug from "debug";
 import argon from "argon2";
 import cuid from "cuid";
-import jwt from "jsonwebtoken";
+import { prisma } from "@/prisma";
 import { Err, Ok } from "@/response";
-import { db } from "@/mem";
 
 const log = debug("api:auth:login");
 
@@ -20,9 +21,16 @@ router.post("/login", async ctx => {
     try {
         const { username, password } = schema.parse(ctx.request.body);
 
-        const account = db.accounts.find(
-            account => account.username === username || account.email === username
-        );
+        const account = await prisma.userSnapshot.findFirst({
+            where: {
+                revoked: false,
+                OR: [
+                    { username },
+                    { email: { email: username } }
+                ]
+            },
+            orderBy: { id: "desc" }
+        });
 
         if (!account) {
             log("Invalid username or password");
@@ -31,7 +39,7 @@ router.post("/login", async ctx => {
         }
 
         log("checking password for %s", account.username);
-        const valid = await argon.verify(account?.password ?? "", password);
+        const valid = await argon.verify(account.password ?? "", password);
 
         if (!valid) {
             log("Invalid username or password");
@@ -39,22 +47,25 @@ router.post("/login", async ctx => {
             return;
         }
 
-        const token = {
+        const token: Token = {
             token: cuid(),
             username: account.username,
-            expires: Date.now() + 1000 * 60 * 60,
+            expires: Math.floor(Date.now() / 1000) + 60 * 60,
             traits: []
         };
-        log("creating token %s for %s", token.token, token.username);
+        log("creating token %s for %s with traits %o", token.token, token.username, token.traits);
 
-        db.tokens.push(token);
+        await prisma.userToken.create({
+            data: {
+                id: token.token,
+                user: { connect: { id: account.id } },
+                expires: new Date(token.expires * 1_000),
+                traits: token.traits
+            }
+        });
 
-        const jwt_token = jwt.sign(token, process.env.JWT_SECRET ?? "unicourse", {
-            expiresIn: "1h"
-        });
-        Ok(ctx, {
-            token: jwt_token
-        });
+        const jwt_token = sign(token);
+        Ok(ctx, { token: jwt_token });
     } catch (err) {
         if (err instanceof z.ZodError) {
             log("Invalid request body");

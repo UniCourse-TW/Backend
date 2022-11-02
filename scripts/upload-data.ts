@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { CourseType, PrismaClient } from "@prisma/client";
+import { CourseType, PrismaClient } from "@unicourse-tw/prisma";
 import { program } from "commander";
 import ora from "ora";
 
