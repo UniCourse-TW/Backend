@@ -34,26 +34,28 @@ export const ENDPOINT_TREE = {
     auth: {
         login: undefined,
         register: undefined
-    }
+    },
+    health: undefined
 } as const;
 
 export type EndpointPath = PathBuilder<typeof ENDPOINT_TREE>;
 
-export const ENDPOINT_RESPONSE = {
-    "auth": undefined,
+export interface EndpointResponseMapping {
+    "auth": never
     "auth/login": {
-        token: ""
-    },
-    "auth/register": {
-        username: "",
-        email: ""
+        token: string
     }
-} as const;
+    "auth/register": {
+        username: string
+        email: string
+    }
+    "health": {
+        server: "ok" | "error"
+        database: "ok" | "error"
+    }
+}
 
 export type EndpointResponse<P extends EndpointPath = EndpointPath> = {
-    [K in P]: K extends keyof typeof ENDPOINT_RESPONSE
-        ? typeof ENDPOINT_RESPONSE[K] extends undefined
-            ? never
-            : typeof ENDPOINT_RESPONSE[K]
-        : never;
+    [K in P]: K extends keyof EndpointResponseMapping
+        ? EndpointResponseMapping[K] : never;
 };

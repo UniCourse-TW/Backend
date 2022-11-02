@@ -116,4 +116,8 @@ export class UniCourse {
         this.use(response.token);
         return this.token!;
     }
+
+    public async status(): Promise<EndpointResponse["health"]> {
+        return await this.req("health");
+    }
 }
