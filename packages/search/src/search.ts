@@ -34,8 +34,8 @@ export function default_course_search(q: string): Prisma.CourseFindManyArgs {
     }
 
     let [year, term] = date2term();
-    year = parseInt(map.year?.[0]) ?? year;
-    term = parseInt(map.term?.[0]) ?? term;
+    year = parseInt(map.year?.[0]) || year;
+    term = parseInt(map.term?.[0]) || term;
 
     return {
         where: {
