@@ -38,7 +38,7 @@ And build the prisma client:
 
 ```sh
 # in the development environment
-prisma db push
+pnpm build:all
 ```
 
 ### Run in Development Mode

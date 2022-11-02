@@ -11,7 +11,7 @@ cp .env.example .env
 docker compose up dev -d
 
 docker compose exec dev pnpm i
-docker compose exec dev prisma db push
+docker compose exec dev pnpm build:all
 docker compose exec dev tsx scripts/download-data.ts 110-1 110-2 111-1
 docker compose exec dev tsx scripts/upload-data.ts data/110-1.json data/110-2.json data/111-1.json
 
