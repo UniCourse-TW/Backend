@@ -6,17 +6,12 @@ import { Err, Ok } from "@/response";
 const router = new Router();
 
 router.get("/", async ctx => {
-    const id = parseInt(ctx.params.id);
-
-    if (isNaN(id)) {
-        Err(ctx, "Invalid course id", { code: 400 });
-        return;
-    }
+    const id = ctx.params.id;
 
     const course = await prisma.course.findUnique({
         where: { id },
         include: {
-            department: true,
+            entity: true,
             programs: true,
             teachers: true
         }

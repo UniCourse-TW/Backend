@@ -24,6 +24,7 @@
         "@prisma/client": "^4.4.0",
         "@unicourse-tw/token": "workspace:*",
         "@unicourse-tw/prisma": "workspace:*",
+        "@unicourse-tw/course-search": "workspace:*",
         "argon2": "^0.30.1",
         "cuid": "^2.1.8",
         "debug": "^4.3.4",
