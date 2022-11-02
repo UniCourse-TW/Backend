@@ -65,8 +65,8 @@ export class UniCourse {
     public async req(path: string, options: RequestInit = {}): Promise<unknown> {
         const headers = new Headers();
         headers.set("Content-Type", "application/json");
-        if (this.token) {
-            headers.set("Authorization", `Bearer ${this.token.token}`);
+        if (this.is_valid()) {
+            headers.set("Authorization", `Bearer ${this.raw_token}`);
         }
 
         for (const [key, value] of Object.entries(options.headers ?? {})) {
@@ -79,6 +79,10 @@ export class UniCourse {
             headers
         });
         log("response", path, response.status, response.statusText);
+
+        if (Math.floor(response.status / 100) !== 2) {
+            throw new UniCourseApiError(response.statusText, response.status);
+        }
 
         const { data, error } = await response.json();
         log("result", path, data, error);
