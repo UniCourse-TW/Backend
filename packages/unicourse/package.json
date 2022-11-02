@@ -19,5 +19,13 @@
     "devDependencies": {
         "@types/debug": "^4.1.7",
         "tsup": "^6.2.3"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
     }
 }

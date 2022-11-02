@@ -26,5 +26,13 @@
         "@types/inquirer": "^9.0.2",
         "tsup": "^6.2.3",
         "tsx": "^3.10.1"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
     }
 }
