@@ -132,11 +132,13 @@ importers:
   packages/unicourse:
     specifiers:
       '@types/debug': ^4.1.7
+      '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
       cross-fetch: ^3.1.5
       debug: ^4.3.4
       tsup: ^6.2.3
     dependencies:
+      '@unicourse-tw/prisma': link:../prisma
       '@unicourse-tw/token': link:../token
       cross-fetch: 3.1.5
       debug: 4.3.4

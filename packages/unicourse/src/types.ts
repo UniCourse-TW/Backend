@@ -1,3 +1,5 @@
+import type { UserProfile } from "@unicourse-tw/prisma";
+
 export type PathNode =
     | undefined
     | string
@@ -30,15 +32,17 @@ export type PathBuilder<
         }[keyof Parent]
         : unknown;
 
-export const ENDPOINT_TREE = {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type EndpointTree = {
     auth: {
-        login: undefined,
+        login: undefined
         register: undefined
-    },
+    }
     health: undefined
-} as const;
+    profile: { [key: string]: undefined }
+};
 
-export type EndpointPath = PathBuilder<typeof ENDPOINT_TREE>;
+export type EndpointPath = PathBuilder<EndpointTree>;
 
 export interface EndpointResponseMapping {
     "auth": never
@@ -53,9 +57,12 @@ export interface EndpointResponseMapping {
         server: "ok" | "error"
         database: "ok" | "error"
     }
+    [key: `profile/${string}`]: UserProfile
 }
 
-export type EndpointResponse<P extends EndpointPath = EndpointPath> = {
+export type EndpointResponse
+<P extends keyof EndpointResponseMapping = keyof EndpointResponseMapping>
+= {
     [K in P]: K extends keyof EndpointResponseMapping
         ? EndpointResponseMapping[K] : never;
 };

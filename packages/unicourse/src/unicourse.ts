@@ -3,7 +3,7 @@ import debug from "debug";
 import type { Token } from "@unicourse-tw/token";
 import { decode } from "@unicourse-tw/token";
 import { hash } from "./hash";
-import type { EndpointPath, EndpointResponse } from "./types";
+import type { EndpointResponse } from "./types";
 import { UniCourseApiError } from "./errors";
 
 const log = debug("unicourse:client");
@@ -57,7 +57,7 @@ export class UniCourse {
      * @param path The path of the endpoint. (without the leading slash)
      * @param options The options passed to the native fetch.
      */
-    public async req<T extends EndpointPath = EndpointPath>(
+    public async req<T extends keyof EndpointResponse = keyof EndpointResponse>(
         path: T,
         options?: RequestInit
     ): Promise<EndpointResponse[T]>;
@@ -123,5 +123,11 @@ export class UniCourse {
 
     public async status(): Promise<EndpointResponse["health"]> {
         return await this.req("health");
+    }
+
+    public async profile<T extends string = string>(
+        username: T
+    ): Promise<EndpointResponse[`profile/${T}`]> {
+        return await this.req(`profile/${username}`);
     }
 }
