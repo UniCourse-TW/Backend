@@ -11,7 +11,7 @@ const command = new Command("whoami")
 
             const uni = new UniCourse(config.token, { server });
             const user = uni.whoami();
-            if (user) {
+            if (user && uni.is_valid()) {
                 console.log(chalk.green("You are logged in as"), chalk.bold(user.username));
             } else {
                 console.log(chalk.red("Invalid token"));
