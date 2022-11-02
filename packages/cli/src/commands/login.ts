@@ -7,10 +7,9 @@ import { config, defaults } from "../store";
 const command = new Command("login")
     .description("Log in to the UniCourse server")
     .argument("<username>", "Your username")
-    .option("-s, --server <server>", "The server to log in to", defaults.server)
+    .option("-s, --server <server>", "The server to log in to", config.server || defaults.server)
     .action(async (username: string, opt) => {
-        const server = opt.server || defaults.server;
-        const uni = new UniCourse(undefined, { server });
+        const uni = new UniCourse(undefined, { server: opt.server });
 
         const { password } = await inquirer.prompt([
             {
@@ -34,7 +33,7 @@ const command = new Command("login")
             }
 
             config.token = uni.raw_token;
-            config.server = server;
+            config.server = opt.server;
             console.log(chalk.green("Logged in as"), chalk.bold(token.username));
         } catch (err) {
             if (err instanceof UniCourseApiError) {

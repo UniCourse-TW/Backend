@@ -7,6 +7,7 @@ const command = new Command("logout")
     .action(async () => {
         if (config.token) {
             config.token = undefined;
+            config.server = undefined;
             console.log(chalk.green("Logged out"));
         } else {
             console.log(chalk.red("Not logged in"));

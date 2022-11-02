@@ -5,10 +5,9 @@ import { config, defaults } from "../store";
 
 const command = new Command("status")
     .description("Check the status of the UniCourse server")
-    .option("-s, --server <server>", "The server to log in to", defaults.server)
+    .option("-s, --server <server>", "The server to log in to", config.server || defaults.server)
     .action(async opt => {
-        const server = opt.server || config.server || defaults.server;
-        const uni = new UniCourse(undefined, { server });
+        const uni = new UniCourse(undefined, { server: opt.server });
 
         try {
             const status = await uni.status();
