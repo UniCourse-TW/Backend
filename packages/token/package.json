@@ -1,0 +1,24 @@
+{
+    "name": "@unicourse-tw/token",
+    "version": "1.0.0-alpha.1",
+    "description": "",
+    "main": "lib/index.js",
+    "module": "lib/index.mjs",
+    "types": "lib/index.d.ts",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "build": "tsup"
+    },
+    "dependencies": {
+        "jsonwebtoken": "^8.5.1"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^8.5.9",
+        "tsup": "^6.2.3"
+    }
+}
