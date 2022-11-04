@@ -7,15 +7,17 @@ import test from "@/api/test";
 import courses from "@/api/courses";
 import auth from "@/api/auth";
 import profile from "@/api/profile";
+import manage from "@/api/manage";
 
-const server = new Koa().use(body());
+const server = new Koa().use(body({ jsonLimit: "50mb" }));
 
 const router = new Router()
     .use("/health", health.routes())
     .use("/test", test.routes())
     .use("/auth", auth.routes())
     .use("/courses", guard, courses.routes())
-    .use("/profile", guard, profile.routes());
+    .use("/profile", guard, profile.routes())
+    .use("/manage", guard, manage.routes());
 
 server
     .use(catcher)
