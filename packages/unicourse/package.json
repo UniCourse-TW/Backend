@@ -12,10 +12,11 @@
         "build": "tsup"
     },
     "dependencies": {
-        "@unicourse-tw/token": "workspace:*",
         "@unicourse-tw/prisma": "workspace:*",
+        "@unicourse-tw/token": "workspace:*",
         "cross-fetch": "^3.1.5",
-        "debug": "^4.3.4"
+        "debug": "^4.3.4",
+        "zod": "^3.19.1"
     },
     "devDependencies": {
         "@types/debug": "^4.1.7",

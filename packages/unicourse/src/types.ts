@@ -1,4 +1,5 @@
 import type { UserProfile } from "@unicourse-tw/prisma";
+import type { PackedJson } from "./json-pack";
 
 export type PathNode =
     | undefined
@@ -40,6 +41,9 @@ export type EndpointTree = {
     }
     health: undefined
     profile: { [key: string]: undefined }
+    manage: {
+        import: undefined
+    }
 };
 
 export type EndpointPath = PathBuilder<EndpointTree>;
@@ -58,6 +62,11 @@ export interface EndpointResponseMapping {
         database: "ok" | "error"
     }
     [key: `profile/${string}`]: UserProfile
+    "manage/import": {
+        teachers: string[]
+        courses: string[]
+        programs: string[]
+    }
 }
 
 export type EndpointResponse
@@ -66,3 +75,38 @@ export type EndpointResponse
     [K in P]: K extends keyof EndpointResponseMapping
         ? EndpointResponseMapping[K] : never;
 };
+
+export interface EndpointBodyMapping {
+    "auth": never
+    "auth/login": {
+        username: string
+        password: string
+    }
+    "auth/register": {
+        username: string
+        password: string
+        email: string
+    }
+    "health": never
+    [key: `profile/${string}`]: never
+    "manage/import": PackedJson
+}
+
+export type EndpointBody
+<P extends keyof EndpointBodyMapping = keyof EndpointBodyMapping>
+= {
+    [K in P]: K extends keyof EndpointBodyMapping
+        ? EndpointBodyMapping[K] : never;
+};
+
+export type EndpointRequestInit<
+    T = keyof EndpointBodyMapping
+> = (Omit<RequestInit, "body"> & {
+    method: "POST"
+    body: T extends keyof EndpointBodyMapping
+        ? EndpointBody[T] | string
+        : (BodyInit | undefined)
+}) | (Omit<RequestInit, "body"> & {
+    method: "GET"
+    body: undefined
+});

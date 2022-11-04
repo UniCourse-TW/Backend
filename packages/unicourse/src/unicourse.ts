@@ -3,8 +3,10 @@ import debug from "debug";
 import type { Token } from "@unicourse-tw/token";
 import { decode } from "@unicourse-tw/token";
 import { hash } from "./hash";
-import type { EndpointResponse } from "./types";
+import type { EndpointRequestInit, EndpointResponse } from "./types";
 import { UniCourseApiError } from "./errors";
+import type { PackedJson } from "./json-pack";
+import { verify_packed_json } from "./json-pack";
 
 const log = debug("unicourse:client");
 
@@ -59,10 +61,13 @@ export class UniCourse {
      */
     public async req<T extends keyof EndpointResponse = keyof EndpointResponse>(
         path: T,
-        options?: RequestInit
+        options?: EndpointRequestInit<T>
     ): Promise<EndpointResponse[T]>;
     public async req(path: string, options?: RequestInit): Promise<unknown>;
-    public async req(path: string, options: RequestInit = {}): Promise<unknown> {
+    public async req(
+        path: string,
+        options: RequestInit | EndpointRequestInit = {}
+    ): Promise<unknown> {
         const headers = new Headers();
         headers.set("Content-Type", "application/json");
         if (this.is_valid()) {
@@ -76,12 +81,21 @@ export class UniCourse {
         log("request", path, options);
         const response = await fetch(`${this.server}/${path}`, {
             ...options,
+            body: typeof options.body !== "string" ? JSON.stringify(options.body) : options.body,
             headers
         });
         log("response", path, response.status, response.statusText);
 
         if (Math.floor(response.status / 100) !== 2) {
-            throw new UniCourseApiError(response.statusText, response.status);
+            let msg: string;
+            try {
+                const { error } = await response.json();
+                msg = error;
+            } catch {
+                msg = response.statusText;
+            }
+
+            throw new UniCourseApiError(msg, response.status);
         }
 
         const { data, error } = await response.json();
@@ -100,21 +114,21 @@ export class UniCourse {
     ): Promise<EndpointResponse["auth/register"]> {
         return await this.req("auth/register", {
             method: "POST",
-            body: JSON.stringify({
+            body: {
                 username,
                 password: await hash(password),
                 email
-            })
+            }
         });
     }
 
     public async login(username: string, password: string): Promise<Token> {
         const response = await this.req("auth/login", {
             method: "POST",
-            body: JSON.stringify({
+            body: {
                 username,
                 password: await hash(password)
-            })
+            }
         });
 
         this.use(response.token);
@@ -129,5 +143,13 @@ export class UniCourse {
         username: T
     ): Promise<EndpointResponse[`profile/${T}`]> {
         return await this.req(`profile/${username}`);
+    }
+
+    public async import(json: PackedJson): Promise<EndpointResponse["manage/import"]> {
+        const packed = verify_packed_json(json);
+        return await this.req("manage/import", {
+            method: "POST",
+            body: packed
+        });
     }
 }
