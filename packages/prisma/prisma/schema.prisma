@@ -156,8 +156,7 @@ model Course {
   programs      CourseProgram[]
   teachers      Teacher[]
   prerequisites Course[]        @relation("PrerequisiteToCourse")
-  advanced      Course?         @relation("PrerequisiteToCourse", fields: [advanced_id], references: [id])
-  advanced_id   String?
+  advanced      Course[]        @relation("PrerequisiteToCourse")
 }
 
 // Entity End
