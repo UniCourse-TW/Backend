@@ -147,9 +147,7 @@ model Course {
   description   String
   code          String
   type          CourseType
-  grade         Int?
   credit        Int
-  schedule      Json
   extra         Json
   provider      Entity          @relation(fields: [provider_id], references: [id])
   provider_id   String
