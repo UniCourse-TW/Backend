@@ -44,7 +44,7 @@ export function default_course_search(q: string): Prisma.CourseFindManyArgs {
             term
         },
         include: {
-            entity: true,
+            provider: true,
             programs: true,
             teachers: true
         },
