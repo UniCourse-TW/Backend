@@ -151,8 +151,8 @@ model Course {
   credit        Int
   schedule      Json
   extra         Json
-  entity        Entity          @relation(fields: [entity_id], references: [id])
-  entity_id     String
+  provider      Entity          @relation(fields: [provider_id], references: [id])
+  provider_id   String
   programs      CourseProgram[]
   teachers      Teacher[]
   prerequisites Course[]        @relation("PrerequisiteToCourse")
