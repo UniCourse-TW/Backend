@@ -1,6 +1,6 @@
 import Router from "@koa/router";
-import type { JsonCourse, JsonEntity, JsonProgram, JsonTeacher } from "unicourse";
-import { verify_packed_json } from "unicourse";
+import type { PackedCourse, PackedEntity, PackedProgram, PackedTeacher } from "course-pack";
+import { verify as verify_course_pack } from "course-pack";
 import debug from "debug";
 import cuid from "cuid";
 import type { Entity } from "@unicourse-tw/prisma";
@@ -18,9 +18,9 @@ router.post("/", async ctx => {
     }
 
     try {
-        const json = verify_packed_json(body);
+        const json = verify_course_pack(body);
 
-        const raw_teachers = new Map<string, JsonTeacher>();
+        const raw_teachers = new Map<string, PackedTeacher>();
         for (const teacher of json.teachers) {
             if (raw_teachers.has(teacher.id)) {
                 Err(ctx, `Duplicate teacher id: ${teacher.id}`, { code: 400 });
@@ -46,7 +46,7 @@ router.post("/", async ctx => {
             }
         }
 
-        const raw_programs = new Map<string, JsonProgram>();
+        const raw_programs = new Map<string, PackedProgram>();
         for (const program of json.programs) {
             if (raw_programs.has(program.id)) {
                 Err(ctx, `Duplicate program id: ${program.id}`, { code: 400 });
@@ -72,12 +72,12 @@ router.post("/", async ctx => {
             }
         }
 
-        const courses = new Map<JsonCourse, string>();
+        const courses = new Map<PackedCourse, string>();
         const course_mapping = new Map<string, string>();
         const roots = json.entities;
         for (const root of roots) {
             const queue = [root];
-            const parent = new Map<JsonEntity, Entity | null>();
+            const parent = new Map<PackedEntity, Entity | null>();
             parent.set(root, null);
             while (queue.length > 0) {
                 const current = queue.shift()!;

@@ -1,5 +1,5 @@
 import type { UserProfile } from "@unicourse-tw/prisma";
-import type { PackedJson } from "./json-pack";
+import type { CoursePack } from "course-pack";
 
 export type PathNode =
     | undefined
@@ -89,7 +89,7 @@ export interface EndpointBodyMapping {
     }
     "health": never
     [key: `profile/${string}`]: never
-    "manage/import": PackedJson
+    "manage/import": CoursePack
 }
 
 export type EndpointBody

@@ -2,11 +2,11 @@ import fetch from "cross-fetch";
 import debug from "debug";
 import type { Token } from "@unicourse-tw/token";
 import { decode } from "@unicourse-tw/token";
+import type { CoursePack } from "course-pack";
+import { verify as verify_course_pack } from "course-pack";
 import { hash } from "./hash";
 import type { EndpointRequestInit, EndpointResponse } from "./types";
 import { UniCourseApiError } from "./errors";
-import type { PackedJson } from "./json-pack";
-import { verify_packed_json } from "./json-pack";
 
 const log = debug("unicourse:client");
 
@@ -145,8 +145,8 @@ export class UniCourse {
         return await this.req(`profile/${username}`);
     }
 
-    public async import(json: PackedJson): Promise<EndpointResponse["manage/import"]> {
-        const packed = verify_packed_json(json);
+    public async import(json: CoursePack): Promise<EndpointResponse["manage/import"]> {
+        const packed = verify_course_pack(json);
         return await this.req("manage/import", {
             method: "POST",
             body: packed
