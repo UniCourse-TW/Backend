@@ -16,10 +16,10 @@
         "prisma": "prisma"
     },
     "dependencies": {
-        "@prisma/client": "^4.4.0"
+        "@prisma/client": "^4.5.0"
     },
     "devDependencies": {
-        "prisma": "^4.4.0"
+        "prisma": "^4.5.0"
     },
     "homepage": "https://github.com/UniCourse-TW/",
     "repository": {

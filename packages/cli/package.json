@@ -24,8 +24,8 @@
     },
     "devDependencies": {
         "@types/inquirer": "^9.0.2",
-        "tsup": "^6.2.3",
-        "tsx": "^3.10.1"
+        "tsup": "^6.4.0",
+        "tsx": "^3.11.0"
     },
     "homepage": "https://github.com/UniCourse-TW/",
     "repository": {

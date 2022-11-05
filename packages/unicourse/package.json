@@ -21,7 +21,7 @@
     },
     "devDependencies": {
         "@types/debug": "^4.1.7",
-        "tsup": "^6.2.3"
+        "tsup": "^6.4.0"
     },
     "homepage": "https://github.com/UniCourse-TW/",
     "repository": {
