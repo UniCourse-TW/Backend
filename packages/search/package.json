@@ -1,6 +1,6 @@
 {
     "name": "@unicourse-tw/course-search",
-    "version": "1.0.0-alpha.3",
+    "version": "1.0.0-alpha.4",
     "description": "",
     "main": "lib/index.js",
     "module": "lib/index.mjs",
