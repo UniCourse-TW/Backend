@@ -5,7 +5,12 @@ import { decode } from "@unicourse-tw/token";
 import type { CoursePack } from "course-pack";
 import { verify as verify_course_pack } from "course-pack";
 import { hash } from "./hash";
-import type { EndpointRequestInit, EndpointResponse } from "./types";
+import type {
+    EndpointMethod,
+    EndpointPath,
+    EndpointRequestInit,
+    EndpointResponseBody
+} from "./types";
 import { UniCourseApiError } from "./errors";
 
 const log = debug("unicourse:client");
@@ -59,10 +64,19 @@ export class UniCourse {
      * @param path The path of the endpoint. (without the leading slash)
      * @param options The options passed to the native fetch.
      */
-    public async req<T extends keyof EndpointResponse = keyof EndpointResponse>(
+    public async req<T extends EndpointPath = EndpointPath>(
         path: T,
-        options?: EndpointRequestInit<T>
-    ): Promise<EndpointResponse[T]>;
+    ): Promise<"GET" extends EndpointMethod<T> ? EndpointResponseBody<T, "GET"> : never>;
+    public async req<
+        T extends EndpointPath = EndpointPath,
+        O extends EndpointRequestInit<T> = EndpointRequestInit<T>
+    >(
+        path: T,
+        options: O
+    ): Promise<O extends { method: EndpointMethod<T> }
+        ? EndpointResponseBody<T, O["method"]>
+        : never
+    >;
     public async req(path: string, options?: RequestInit): Promise<unknown>;
     public async req(
         path: string,
@@ -111,7 +125,7 @@ export class UniCourse {
         username: string,
         password: string,
         email: string
-    ): Promise<EndpointResponse["auth/register"]> {
+    ): Promise<EndpointResponseBody<"auth/register", "POST">> {
         return await this.req("auth/register", {
             method: "POST",
             body: {
@@ -135,19 +149,17 @@ export class UniCourse {
         return this.token!;
     }
 
-    public async status(): Promise<EndpointResponse["health"]> {
-        return await this.req("health");
+    public async status(): Promise<EndpointResponseBody<"health">> {
+        return this.req("health");
     }
 
-    public async profile<T extends string = string>(
-        username: T
-    ): Promise<EndpointResponse[`profile/${T}`]> {
-        return await this.req(`profile/${username}`);
+    public async profile(username: string): Promise<EndpointResponseBody<`profile/${string}`>> {
+        return this.req(`profile/${username}`);
     }
 
-    public async import(json: CoursePack): Promise<EndpointResponse["manage/import"]> {
+    public async import(json: CoursePack): Promise<EndpointResponseBody<"manage/import", "POST">> {
         const packed = verify_course_pack(json);
-        return await this.req("manage/import", {
+        return this.req("manage/import", {
             method: "POST",
             body: packed
         });
