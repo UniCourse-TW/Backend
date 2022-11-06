@@ -11,7 +11,7 @@ router.get("/", async ctx => {
     const course = await prisma.course.findUnique({
         where: { id },
         include: {
-            entity: true,
+            provider: true,
             programs: true,
             teachers: true
         }
