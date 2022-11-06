@@ -12,7 +12,8 @@
         "lib"
     ],
     "scripts": {
-        "build": "tsup"
+        "build": "tsup",
+        "doc": "typedoc --out docs src"
     },
     "dependencies": {
         "@unicourse-tw/prisma": "workspace:*",
@@ -24,7 +25,9 @@
     },
     "devDependencies": {
         "@types/debug": "^4.1.7",
-        "tsup": "^6.4.0"
+        "tsup": "^6.4.0",
+        "typedoc": "^0.23.20",
+        "typescript": "^4.8.4"
     },
     "homepage": "https://github.com/UniCourse-TW/",
     "repository": {
