@@ -9,7 +9,7 @@ import auth from "@/api/auth";
 import profile from "@/api/profile";
 import manage from "@/api/manage";
 
-const server = new Koa().use(body({ jsonLimit: "50mb" }));
+const server = new Koa().use(body({ jsonLimit: "100mb" }));
 
 const router = new Router()
     .use("/health", health.routes())
