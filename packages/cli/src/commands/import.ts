@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import { Command } from "commander";
 import chalk from "chalk";
-import { UniCourse, UniCourseApiError, ZodError } from "unicourse";
+import { ZodError } from "course-pack";
+import { UniCourse, UniCourseApiError } from "unicourse";
 import { config, defaults } from "../store";
 
 const command = new Command("import")

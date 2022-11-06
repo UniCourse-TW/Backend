@@ -84,6 +84,7 @@ importers:
       '@types/inquirer': ^9.0.2
       chalk: ^5.1.2
       commander: ^9.4.1
+      course-pack: workspace:*
       file-mapping: ^0.2.1
       inquirer: ^9.1.4
       node-fetch: ^3.2.10
@@ -93,6 +94,7 @@ importers:
     dependencies:
       chalk: 5.1.2
       commander: 9.4.1
+      course-pack: link:../course-pack
       file-mapping: 0.2.1
       inquirer: 9.1.4
       node-fetch: 3.2.10
