@@ -34,11 +34,17 @@ Then you may need to install the dependencies at the first time:
 pnpm i
 ```
 
-And build the prisma client:
+Build the packages:
 
 ```sh
 # in the development environment
 pnpm build:all
+```
+
+Shape the database:
+
+```sh
+pnpm db:push
 ```
 
 ### Run in Development Mode
