@@ -1,31 +1,35 @@
-import type { UserProfile } from "@unicourse-tw/prisma";
+import type { Course, CourseProgram, Entity, Teacher, UserProfile } from "@unicourse-tw/prisma";
 import type { CoursePack } from "course-pack";
 
 export type MethodInterface = [any, any];
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
+export const GET: unique symbol = Symbol("GET");
+export const POST: unique symbol = Symbol("POST");
+export const PUT: unique symbol = Symbol("PUT");
+export const DELETE: unique symbol = Symbol("DELETE");
+export type MethodSymbol = typeof GET | typeof POST | typeof PUT | typeof DELETE;
 
-export type _EndpointInterface = Partial<Record<Method, MethodInterface>>;
+export type _EndpointInterface = Partial<Record<MethodSymbol, MethodInterface>>;
 
 export type EndpointInterface =
-    _EndpointInterface & { GET: MethodInterface } |
-    _EndpointInterface & { POST: MethodInterface } |
-    _EndpointInterface & { PUT: MethodInterface } |
-    _EndpointInterface & { DELETE: MethodInterface };
+    _EndpointInterface & { [GET]: MethodInterface } |
+    _EndpointInterface & { [POST]: MethodInterface } |
+    _EndpointInterface & { [PUT]: MethodInterface } |
+    _EndpointInterface & { [DELETE]: MethodInterface };
 
 export type PathNode =
-    | undefined
     | EndpointInterface
     | {
-        [key: string]: PathNode
+        [key: string]: PathNode | MethodInterface
     };
 
 export interface PathTree {
-    [key: string]: PathNode
+    [key: string]: PathNode | MethodInterface
 }
 
 export type Join<K, P> = K extends string | number
-    ? P extends string | number
-        ? `${K}${"" extends P ? "" : "/"}${P}`
+    ? P extends string
+        ? `${K}${P extends "" ? "" : "/"}${P}`
         : never
     : never;
 
@@ -39,9 +43,9 @@ export type PathBuilder<
     : Parent extends PathTree
         ? {
             [K in keyof Parent]-?: K extends string
-                ? K extends keyof EndpointInterface
-                    ? never
-                    : `${K}` | Join<K, PathBuilder<Parent[K], Prev[Depth]>>
+                ? Parent[K] extends PathNode
+                    ? `${K}` | Join<K, PathBuilder<Parent[K], Prev[Depth]>>
+                    : never
                 : never;
         }[keyof Parent]
         : unknown;
@@ -50,7 +54,7 @@ export type PathBuilder<
 export type EndpointTree = {
     auth: {
         login: {
-            POST: [
+            [POST]: [
                 {
                     username: string
                     password: string
@@ -61,7 +65,7 @@ export type EndpointTree = {
             ]
         }
         register: {
-            POST: [
+            [POST]: [
                 {
                     username: string
                     password: string
@@ -74,8 +78,26 @@ export type EndpointTree = {
             ]
         }
     }
+    courses: {
+        [POST]: [
+            {
+                q: string
+            },
+            Course[]
+        ]
+        [key: string]: {
+            [GET]: [
+                never,
+                Course & {
+                    provider: Entity
+                    programs: CourseProgram[]
+                    teachers: Teacher[]
+                }
+            ]
+        }
+    }
     health: {
-        GET: [
+        [GET]: [
             never,
             {
                 server: "ok" | "error"
@@ -85,7 +107,7 @@ export type EndpointTree = {
     }
     profile: {
         [key: string]: {
-            GET: [
+            [GET]: [
                 never,
                 UserProfile
             ]
@@ -93,7 +115,7 @@ export type EndpointTree = {
     }
     manage: {
         import: {
-            POST: [
+            [POST]: [
                 CoursePack,
                 {
                     teachers: string[]
@@ -116,20 +138,41 @@ export type Endpoint<T extends string = EndpointPath, P extends PathNode = Endpo
             : never
         : T extends keyof P
             ? P[T] extends EndpointInterface
-                ? P[T]
+                ? P[T] extends infer I
+                    ? { [K in keyof I as K extends MethodSymbol ? K : never]: I[K] }
+                    : never
                 : never
             : never;
 
-export type EndpointMethod<T extends string = EndpointPath>
+export type EndpointMethodSymbol<T extends string = EndpointPath>
     = Endpoint<T> extends EndpointInterface
-        ? keyof Endpoint<T> extends Method
+        ? keyof Endpoint<T> extends MethodSymbol
             ? keyof Endpoint<T>
             : never
         : never;
 
+export interface MethodSymbolMapping {
+    [GET]: "GET"
+    [POST]: "POST"
+    [PUT]: "PUT"
+    [DELETE]: "DELETE"
+}
+
+export interface MethodSymbolMappingRev {
+    GET: typeof GET
+    POST: typeof POST
+    PUT: typeof PUT
+    DELETE: typeof DELETE
+}
+
+export type EndpointMethod<T extends string = EndpointPath>
+    = EndpointMethodSymbol<T> extends MethodSymbol
+        ? MethodSymbolMapping[EndpointMethodSymbol<T>]
+        : never;
+
 export type EndpointBody<
     T extends string = EndpointPath,
-    M extends EndpointMethod<T> = EndpointMethod<T>
+    M extends EndpointMethodSymbol<T> = EndpointMethodSymbol<T>
 >
     = Endpoint<T> extends EndpointInterface
         ? Endpoint<T>[M]
@@ -137,7 +180,7 @@ export type EndpointBody<
 
 export type EndpointRequestBody<
     T extends string = EndpointPath,
-    M extends EndpointMethod<T> = EndpointMethod<T>
+    M extends EndpointMethodSymbol<T> = EndpointMethodSymbol<T>
 >
     = EndpointBody<T, M> extends [infer Req, any]
         ? Req
@@ -145,7 +188,7 @@ export type EndpointRequestBody<
 
 export type EndpointResponseBody<
     T extends string = EndpointPath,
-    M extends EndpointMethod<T> = EndpointMethod<T>
+    M extends EndpointMethodSymbol<T> = EndpointMethodSymbol<T>
 >
     = EndpointBody<T, M> extends [any, infer Res]
         ? Res
@@ -156,5 +199,10 @@ export type EndpointRequestInit<
     M extends EndpointMethod<T> = EndpointMethod<T>
 > = Omit<RequestInit, "method" | "body"> & {
     method: M
-    body: EndpointRequestBody<T, M>
+    body: EndpointRequestBody<
+    T,
+    MethodSymbolMappingRev[M] extends EndpointMethodSymbol<T>
+        ? MethodSymbolMappingRev[M]
+        : never
+    >
 };

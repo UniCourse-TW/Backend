@@ -7,9 +7,13 @@ import { verify as verify_course_pack } from "course-pack";
 import { hash } from "./hash";
 import type {
     EndpointMethod,
+    EndpointMethodSymbol,
     EndpointPath,
     EndpointRequestInit,
-    EndpointResponseBody
+    EndpointResponseBody,
+    GET,
+    MethodSymbolMappingRev,
+    POST
 } from "./types";
 import { UniCourseApiError } from "./errors";
 
@@ -66,7 +70,9 @@ export class UniCourse {
      */
     public async req<T extends EndpointPath = EndpointPath>(
         path: T,
-    ): Promise<"GET" extends EndpointMethod<T> ? EndpointResponseBody<T, "GET"> : never>;
+    ): Promise<
+    typeof GET extends EndpointMethodSymbol<T> ? EndpointResponseBody<T, typeof GET> : never
+    >;
     public async req<
         T extends EndpointPath = EndpointPath,
         O extends EndpointRequestInit<T> = EndpointRequestInit<T>
@@ -74,7 +80,11 @@ export class UniCourse {
         path: T,
         options: O
     ): Promise<O extends { method: EndpointMethod<T> }
-        ? EndpointResponseBody<T, O["method"]>
+        ? EndpointResponseBody<
+        T,
+        MethodSymbolMappingRev[O["method"]] extends EndpointMethodSymbol<T>
+            ? MethodSymbolMappingRev[O["method"]]
+            : never>
         : never
     >;
     public async req(path: string, options?: RequestInit): Promise<unknown>;
@@ -125,7 +135,7 @@ export class UniCourse {
         username: string,
         password: string,
         email: string
-    ): Promise<EndpointResponseBody<"auth/register", "POST">> {
+    ): Promise<EndpointResponseBody<"auth/register", typeof POST>> {
         return await this.req("auth/register", {
             method: "POST",
             body: {
@@ -157,7 +167,9 @@ export class UniCourse {
         return this.req(`profile/${username}`);
     }
 
-    public async import(json: CoursePack): Promise<EndpointResponseBody<"manage/import", "POST">> {
+    public async import(
+        json: CoursePack
+    ): Promise<EndpointResponseBody<"manage/import", typeof POST>> {
         const packed = verify_course_pack(json);
         return this.req("manage/import", {
             method: "POST",
