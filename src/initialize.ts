@@ -37,7 +37,7 @@ export async function initialize(): Promise<void> {
                 email: { connect: { id: email.id } },
                 username: UNICORSE_ROOT_USER,
                 password: await argon2.hash(await hash(UNICORSE_ROOT_PASSWORD)),
-                perms: { connect: { name: "admin" } }
+                perms: { connect: defaults.map(name => ({ name })) }
             }
         });
         await prisma.userProfile.create({
