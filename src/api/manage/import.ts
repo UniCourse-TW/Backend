@@ -1,19 +1,18 @@
-import Router from "@koa/router";
 import type { PackedCourse, PackedEntity, PackedProgram, PackedTeacher } from "course-pack";
 import { verify as verify_course_pack } from "course-pack";
-import debug from "debug";
 import cuid from "cuid";
 import type { Entity } from "@unicourse-tw/prisma";
+import debug from "@/debug";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
 const log = debug("api:manage:import");
-const router = new Router();
+const router = new UniRouter();
 
 router.post("/", async ctx => {
     const { body } = ctx.request;
     if (!body) {
-        Err(ctx, "No body", { code: 400 });
+        ctx.err("No body", { code: 400 });
         return;
     }
 
@@ -23,7 +22,7 @@ router.post("/", async ctx => {
         const raw_teachers = new Map<string, PackedTeacher>();
         for (const teacher of json.teachers) {
             if (raw_teachers.has(teacher.id)) {
-                Err(ctx, `Duplicate teacher id: ${teacher.id}`, { code: 400 });
+                ctx.err(`Duplicate teacher id: ${teacher.id}`, { code: 400 });
                 return;
             }
             raw_teachers.set(teacher.id, teacher);
@@ -49,7 +48,7 @@ router.post("/", async ctx => {
         const raw_programs = new Map<string, PackedProgram>();
         for (const program of json.programs) {
             if (raw_programs.has(program.id)) {
-                Err(ctx, `Duplicate program id: ${program.id}`, { code: 400 });
+                ctx.err(`Duplicate program id: ${program.id}`, { code: 400 });
                 return;
             }
             raw_programs.set(program.id, program);
@@ -139,14 +138,14 @@ router.post("/", async ctx => {
             }
         }
 
-        Ok(ctx, {
+        ctx.ok({
             teachers: [...(teachers.values())],
             programs: [...(programs.values())],
             courses: [...(courses.values())]
         });
     } catch (err) {
         log(err);
-        Err(ctx, "Invalid JSON", { code: 400 });
+        ctx.err("Invalid JSON", { code: 400 });
     }
 });
 

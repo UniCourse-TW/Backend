@@ -1,12 +1,11 @@
-import Router from "@koa/router";
 import type { Token } from "@unicourse-tw/token";
 import { sign } from "@unicourse-tw/token";
 import { z } from "zod";
-import debug from "debug";
 import argon from "argon2";
 import cuid from "cuid";
+import debug from "@/debug";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
 const log = debug("api:auth:login");
 
@@ -15,7 +14,7 @@ const schema = z.object({
     password: z.string()
 });
 
-export const router = new Router();
+export const router = new UniRouter();
 
 router.post("/login", async ctx => {
     try {
@@ -29,12 +28,26 @@ router.post("/login", async ctx => {
                     { email: { email: username } }
                 ]
             },
-            orderBy: { id: "desc" }
+            orderBy: { id: "desc" },
+            include: {
+                perms: { select: { id: true } },
+                groups: {
+                    include: {
+                        snapshots: {
+                            orderBy: { id: "desc" },
+                            take: 1,
+                            include: {
+                                perms: { select: { id: true } }
+                            }
+                        }
+                    }
+                }
+            }
         });
 
         if (!account) {
             log("Invalid username or password");
-            Err(ctx, "Account not found", { code: 404 });
+            ctx.err("Account not found", { code: 404 });
             return;
         }
 
@@ -43,7 +56,7 @@ router.post("/login", async ctx => {
 
         if (!valid) {
             log("Invalid username or password");
-            Err(ctx, "Invalid username or password", { code: 401 });
+            ctx.err("Invalid username or password", { code: 401 });
             return;
         }
 
@@ -51,7 +64,10 @@ router.post("/login", async ctx => {
             token: cuid(),
             username: account.username,
             expires: Math.floor(Date.now() / 1000) + 60 * 60,
-            traits: []
+            traits: [...new Set([
+                ...account.perms.map(p => p.id),
+                ...account.groups.flatMap(g => g.snapshots[0].perms.map(p => p.id))
+            ])]
         };
         log("creating token %s for %s with traits %o", token.token, token.username, token.traits);
 
@@ -65,11 +81,11 @@ router.post("/login", async ctx => {
         });
 
         const jwt_token = sign(token);
-        Ok(ctx, { token: jwt_token });
+        ctx.ok({ token: jwt_token });
     } catch (err) {
         if (err instanceof z.ZodError) {
             log("Invalid request body");
-            Err(ctx, "Invalid request body", { code: 400 });
+            ctx.err("Invalid request body", { code: 400 });
         }
     }
 });

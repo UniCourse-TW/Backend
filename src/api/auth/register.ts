@@ -1,8 +1,7 @@
-import Router from "@koa/router";
 import { z } from "zod";
-import debug from "debug";
 import argon from "argon2";
-import { Err, Ok } from "@/response";
+import debug from "@/debug";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 
 const log = debug("api:auth:register");
@@ -13,7 +12,7 @@ const schema = z.object({
     email: z.string().email()
 });
 
-export const router = new Router();
+export const router = new UniRouter();
 
 router.post("/register", async ctx => {
     try {
@@ -26,7 +25,7 @@ router.post("/register", async ctx => {
 
         if (account) {
             log("Account already exists");
-            Err(ctx, "Account already exists", { code: 409 });
+            ctx.err("Account already exists", { code: 409 });
             return;
         }
 
@@ -62,11 +61,11 @@ router.post("/register", async ctx => {
             }
         });
 
-        Ok(ctx, { username, email });
+        ctx.ok({ username, email });
     } catch (err) {
         if (err instanceof z.ZodError) {
             log("Invalid request body");
-            Err(ctx, "Invalid request body", { code: 400 });
+            ctx.err("Invalid request body", { code: 400 });
         }
     }
 });

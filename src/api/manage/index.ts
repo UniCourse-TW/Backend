@@ -1,7 +1,7 @@
-import Router from "@koa/router";
 import route_import from "./import";
+import UniRouter from "@/router";
 
-const router = new Router();
+const router = new UniRouter();
 
 router.use("/import", route_import.routes());
 export default router;

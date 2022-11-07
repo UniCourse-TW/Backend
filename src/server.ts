@@ -1,7 +1,7 @@
 import Koa from "koa";
 import body from "koa-bodyparser";
-import Router from "@koa/router";
-import { catcher, guard } from "@/middlewares";
+import UniRouter from "@/router";
+import { catcher, create_guard, parse_token, wrap_response } from "@/middlewares";
 import health from "@/api/health";
 import test from "@/api/test";
 import courses from "@/api/courses";
@@ -9,18 +9,19 @@ import auth from "@/api/auth";
 import profile from "@/api/profile";
 import manage from "@/api/manage";
 
-const server = new Koa().use(body({ jsonLimit: "100mb" }));
-
-const router = new Router()
+const router = new UniRouter()
     .use("/health", health.routes())
     .use("/test", test.routes())
     .use("/auth", auth.routes())
-    .use("/courses", guard, courses.routes())
-    .use("/profile", guard, profile.routes())
-    .use("/manage", guard, manage.routes());
+    .use("/courses", create_guard(["verified"]), courses.routes())
+    .use("/profile", create_guard(["verified"]), profile.routes())
+    .use("/manage", create_guard(["moderator", "verified"]), manage.routes());
 
-server
+const server = new Koa()
     .use(catcher)
+    .use(wrap_response)
+    .use(parse_token)
+    .use(body({ jsonLimit: "100mb" }))
     .use(router.routes())
     .use(router.allowedMethods());
 

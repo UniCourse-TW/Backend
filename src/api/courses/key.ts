@@ -1,9 +1,8 @@
 
-import Router from "@koa/router";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
-const router = new Router();
+const router = new UniRouter();
 
 router.get("/", async ctx => {
     const id = ctx.params.id;
@@ -18,11 +17,11 @@ router.get("/", async ctx => {
     });
 
     if (course === null) {
-        Err(ctx, "Course not found", { code: 404 });
+        ctx.err("Course not found", { code: 404 });
         return;
     }
 
-    Ok(ctx, course);
+    ctx.ok(course);
 });
 
 export default router;

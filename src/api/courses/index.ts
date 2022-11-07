@@ -1,13 +1,12 @@
-import Router from "@koa/router";
 import { SearchError, default_course_search } from "@unicourse-tw/course-search";
 import { z } from "zod";
-import debug from "debug";
 import key from "./key";
+import debug from "@/debug";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
 const log = debug("api:course");
-const router = new Router();
+const router = new UniRouter();
 
 const query = z.object({
     q: z.string().min(1)
@@ -23,14 +22,14 @@ router.get("/", async ctx => {
         const courses = await prisma.course.findMany(search);
         log("searching courses done", courses.length);
 
-        Ok(ctx, courses);
+        ctx.ok(courses);
     } catch (error) {
         if (error instanceof z.ZodError) {
-            Err(ctx, error.message, { code: 400 });
+            ctx.err(error.message, { code: 400 });
         } else if (error instanceof SearchError) {
-            Err(ctx, error.message, { code: 400 });
+            ctx.err(error.message, { code: 400 });
         } else {
-            Err(ctx, "Internal server error");
+            ctx.err("Internal server error");
         }
     }
 });

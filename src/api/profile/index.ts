@@ -1,11 +1,10 @@
-import Router from "@koa/router";
 import { z } from "zod";
-import debug from "debug";
+import debug from "@/debug";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
 const log = debug("api:profile");
-const router = new Router();
+const router = new UniRouter();
 
 router.get("/:username", async ctx => {
     try {
@@ -18,7 +17,7 @@ router.get("/:username", async ctx => {
         });
 
         if (!snapshot) {
-            Err(ctx, "User not found", { code: 404 });
+            ctx.err("User not found", { code: 404 });
             return;
         }
 
@@ -27,14 +26,14 @@ router.get("/:username", async ctx => {
         });
 
         if (!profile) {
-            Err(ctx, "User not found", { code: 404 });
+            ctx.err("User not found", { code: 404 });
             return;
         }
 
-        Ok(ctx, { profile });
+        ctx.ok({ profile });
     } catch (err) {
         if (err instanceof z.ZodError) {
-            Err(ctx, err.message, { code: 400 });
+            ctx.err(err.message, { code: 400 });
         } else {
             throw err;
         }
