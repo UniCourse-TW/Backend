@@ -8,6 +8,8 @@ import { prisma } from "@/prisma";
 
 const guard_log = debug("middleware:guard");
 
+const cuid_cache = new Map<string, string>();
+
 export async function parse_token(ctx: Context, next: Next): Promise<void> {
     const raw_token = ctx.request.headers.authorization?.split(" ")[1].trim();
     ctx.state.raw_token = raw_token;
@@ -15,6 +17,27 @@ export async function parse_token(ctx: Context, next: Next): Promise<void> {
     try {
         guard_log("verifying token", raw_token);
         ctx.state.token = verify(raw_token ?? "");
+
+        const mappings: string[] = [];
+        const unresolved: string[] = [];
+        for (const trait of ctx.state.token.traits) {
+            if (cuid.isCuid(trait)) {
+                if (!cuid_cache.has(trait)) {
+                    unresolved.push(trait);
+                }
+                mappings.push(trait);
+            }
+        }
+        const resolved = await prisma.userPermission.findMany({
+            where: { id: { in: unresolved } },
+            select: { id: true, name: true }
+        });
+        for (const perm of resolved) {
+            cuid_cache.set(perm.id, perm.name);
+        }
+        for (const m of mappings) {
+            ctx.state.token.traits.push(cuid_cache.get(m) ?? m);
+        }
         guard_log("token verified");
     } catch {}
 
