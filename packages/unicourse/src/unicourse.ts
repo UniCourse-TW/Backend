@@ -12,7 +12,7 @@ import type {
     EndpointRequestInit,
     EndpointResponseBody,
     GET,
-    MethodSymbolMappingRev,
+    MethodSymbolMapping,
     POST
 } from "./types";
 import { UniCourseApiError } from "./errors";
@@ -82,8 +82,8 @@ export class UniCourse {
     ): Promise<O extends { method: EndpointMethod<T> }
         ? EndpointResponseBody<
         T,
-        MethodSymbolMappingRev[O["method"]] extends EndpointMethodSymbol<T>
-            ? MethodSymbolMappingRev[O["method"]]
+        MethodSymbolMapping[O["method"]] extends EndpointMethodSymbol<T>
+            ? MethodSymbolMapping[O["method"]]
             : never>
         : never
     >;

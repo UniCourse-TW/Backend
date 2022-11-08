@@ -7,7 +7,21 @@ export const GET: unique symbol = Symbol("GET");
 export const POST: unique symbol = Symbol("POST");
 export const PUT: unique symbol = Symbol("PUT");
 export const DELETE: unique symbol = Symbol("DELETE");
-export type MethodSymbol = typeof GET | typeof POST | typeof PUT | typeof DELETE;
+export const PATCH: unique symbol = Symbol("PATCH");
+export type MethodSymbol = typeof GET | typeof POST | typeof PUT | typeof DELETE | typeof PATCH;
+
+export interface MethodSymbolMapping {
+    [GET]: "GET"
+    [POST]: "POST"
+    [PUT]: "PUT"
+    [DELETE]: "DELETE"
+    [PATCH]: "PATCH"
+    GET: typeof GET
+    POST: typeof POST
+    PUT: typeof PUT
+    DELETE: typeof DELETE
+    PATCH: typeof PATCH
+}
 
 export type _EndpointInterface = Partial<Record<MethodSymbol, MethodInterface>>;
 
@@ -151,20 +165,6 @@ export type EndpointMethodSymbol<T extends string = EndpointPath>
             : never
         : never;
 
-export interface MethodSymbolMapping {
-    [GET]: "GET"
-    [POST]: "POST"
-    [PUT]: "PUT"
-    [DELETE]: "DELETE"
-}
-
-export interface MethodSymbolMappingRev {
-    GET: typeof GET
-    POST: typeof POST
-    PUT: typeof PUT
-    DELETE: typeof DELETE
-}
-
 export type EndpointMethod<T extends string = EndpointPath>
     = EndpointMethodSymbol<T> extends MethodSymbol
         ? MethodSymbolMapping[EndpointMethodSymbol<T>]
@@ -201,8 +201,8 @@ export type EndpointRequestInit<
     method: M
     body: EndpointRequestBody<
     T,
-    MethodSymbolMappingRev[M] extends EndpointMethodSymbol<T>
-        ? MethodSymbolMappingRev[M]
+    MethodSymbolMapping[M] extends EndpointMethodSymbol<T>
+        ? MethodSymbolMapping[M]
         : never
     >
 };
