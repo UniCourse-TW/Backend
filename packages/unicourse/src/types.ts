@@ -197,7 +197,10 @@ export type EndpointResponseBody<
 export type EndpointRequestInit<
     T extends string = EndpointPath,
     M extends EndpointMethod<T> = EndpointMethod<T>
-> = Omit<RequestInit, "method" | "body"> & {
+> = Omit<RequestInit, "method" | "body"> & ({
+    method: "GET"
+    body?: never
+} | {
     method: M
     body: EndpointRequestBody<
     T,
@@ -205,4 +208,4 @@ export type EndpointRequestInit<
         ? MethodSymbolMapping[M]
         : never
     >
-};
+});
