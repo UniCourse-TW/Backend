@@ -119,6 +119,14 @@ router.post("/", async ctx => {
                             }
                         }
                     });
+                    await prisma.entity.update({
+                        where: { id: node.id },
+                        data: {
+                            teachers: {
+                                connect: course.teachers.map(t => ({ id: teachers.get(t)! }))
+                            }
+                        }
+                    });
                     courses.set(course, result.id);
                     course_mapping.set(course.id, node.id);
                 }
