@@ -15,3 +15,5 @@ jest.config.js
 data/
 *.json
 *.yml
+*.yaml
+*.md
