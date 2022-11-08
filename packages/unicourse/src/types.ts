@@ -125,6 +125,10 @@ export type EndpointTree = {
                 never,
                 UserProfile
             ]
+            [PATCH]: [
+                Partial<Omit<UserProfile, "id" | "user_id">>,
+                UserProfile
+            ]
         }
     }
     manage: {
@@ -138,6 +142,32 @@ export type EndpointTree = {
                 }
             ]
         }
+    }
+    me: {
+        [GET]: [
+            never,
+            {
+                username: string
+                email: {
+                    email: string
+                    verified: boolean
+                }
+                profile: {
+                    email: string
+                    name: string
+                    bio: string
+                    school: string
+                    location: string
+                    banner: string
+                    avatar: string
+                    extra: unknown
+                }
+                perms: string[]
+                groups: {
+                    name: string
+                }[]
+            }
+        ]
     }
 };
 
