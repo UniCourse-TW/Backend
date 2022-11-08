@@ -45,6 +45,7 @@ const entity_schema: z.ZodType<PackedEntity> = z.lazy(() => z.object({
 }));
 
 export interface CoursePack {
+    $schema?: "https://esm.sh/course-pack/schema.json"
     teachers: PackedTeacher[]
     programs: PackedProgram[]
     entities: PackedEntity[]
