@@ -99,25 +99,28 @@ router.post("/", async ctx => {
                 }
 
                 for (const course of current.courses) {
-                    const result = await prisma.course.create({
-                        data: {
-                            id: cuid.isCuid(course.id) ? course.id : undefined,
-                            name: course.name,
-                            description: course.description,
-                            code: course.code,
-                            type: course.type,
-                            credit: course.credit,
-                            extra: course.extra,
-                            year: course.year,
-                            term: course.term,
-                            provider: { connect: { id: node.id } },
-                            teachers: {
-                                connect: course.teachers.map(t => ({ id: teachers.get(t)! }))
-                            },
-                            programs: {
-                                connect: course.programs.map(p => ({ id: programs.get(p)! }))
-                            }
+                    const c = {
+                        id: cuid.isCuid(course.id) ? course.id : undefined,
+                        name: course.name,
+                        description: course.description,
+                        code: course.code,
+                        type: course.type,
+                        credit: course.credit,
+                        extra: course.extra,
+                        year: course.year,
+                        term: course.term,
+                        provider: { connect: { id: node.id } },
+                        teachers: {
+                            connect: course.teachers.map(t => ({ id: teachers.get(t)! }))
+                        },
+                        programs: {
+                            connect: course.programs.map(p => ({ id: programs.get(p)! }))
                         }
+                    };
+                    const result = await prisma.course.upsert({
+                        where: { id: course.id },
+                        update: c,
+                        create: c
                     });
                     await prisma.entity.update({
                         where: { id: node.id },
