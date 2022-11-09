@@ -83,7 +83,7 @@ router.post("/", async ctx => {
 
                 const node = await prisma.entity.findFirst({
                     where: {
-                        OR: [{ id: root.name }, { name: root.name }],
+                        name: current.name,
                         parent_id: parent.get(current)?.id
                     }
                 }) ?? await prisma.entity.create({
