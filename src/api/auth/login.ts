@@ -24,7 +24,7 @@ router.post("/login", async ctx => {
             where: {
                 revoked: false,
                 OR: [
-                    { username },
+                    { username: username.toLowerCase() },
                     { email: { email: username } }
                 ]
             },

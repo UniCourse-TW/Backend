@@ -19,7 +19,13 @@ router.post("/register", async ctx => {
         const { username, password, email } = schema.parse(ctx.request.body);
 
         const account = await prisma.userSnapshot.findFirst({
-            where: { username, revoked: false },
+            where: {
+                OR: [
+                    { username: username.toLowerCase() },
+                    { email: { email } }
+                ],
+                revoked: false
+            },
             orderBy: { id: "desc" }
         });
 
