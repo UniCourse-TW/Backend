@@ -1,4 +1,4 @@
-import { date2term } from "../src/utils";
+import { date2term } from "../src/date";
 
 describe("date2term", () => {
     test("2022/01", () => {

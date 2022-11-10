@@ -1,0 +1,42 @@
+{
+    "name": "@unicourse-tw/cli",
+    "version": "1.0.0-alpha.4",
+    "description": "",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+        "unicourse": "dist/index.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "start": "node dist/index.js",
+        "dev": "tsx src/index.ts",
+        "build": "tsup"
+    },
+    "dependencies": {
+        "chalk": "^5.1.2",
+        "commander": "^9.4.1",
+        "course-pack": "workspace:*",
+        "file-mapping": "^0.2.1",
+        "inquirer": "^9.1.4",
+        "node-fetch": "^3.2.10",
+        "unicourse": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/inquirer": "^9.0.2",
+        "tsup": "^6.4.0",
+        "tsx": "^3.11.0"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
+    }
+}

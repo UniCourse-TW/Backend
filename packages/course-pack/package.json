@@ -1,0 +1,33 @@
+{
+    "name": "course-pack",
+    "version": "1.0.0-alpha.4",
+    "description": "Course Pack is a serialized collection of courses, instructors, programs and providers.",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "main": "lib/index.js",
+    "module": "lib/index.mjs",
+    "types": "lib/index.d.ts",
+    "files": [
+        "lib",
+        "schema.json"
+    ],
+    "scripts": {
+        "build": "tsup"
+    },
+    "dependencies": {
+        "@unicourse-tw/prisma": "workspace:*",
+        "zod": "^3.19.1"
+    },
+    "devDependencies": {
+        "tsup": "^6.4.0"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
+    }
+}

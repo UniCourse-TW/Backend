@@ -1,0 +1,32 @@
+{
+    "name": "@unicourse-tw/prisma",
+    "version": "1.0.0-alpha.4",
+    "description": "",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "files": [
+        "prisma"
+    ],
+    "scripts": {
+        "postinstall": "npx -y prisma generate",
+        "build": "prisma generate",
+        "prisma": "prisma"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.5.0"
+    },
+    "devDependencies": {
+        "prisma": "^4.5.0"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
+    }
+}

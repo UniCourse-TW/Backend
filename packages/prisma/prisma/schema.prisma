@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  output          = "../lib"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Error Start
+model ServerError {
+  id        String   @id
+  timestamp DateTime @default(now())
+  message   String
+  stack     String
+  path      String
+}
+
+// Error End
+
+// Auth Start
+model Email {
+  id        String         @id @default(cuid())
+  email     String         @unique
+  verified  Boolean        @default(false)
+  snapshots UserSnapshot[]
+}
+
+model User {
+  id        String         @id @default(cuid())
+  snapshots UserSnapshot[]
+  profile   UserProfile?
+}
+
+// UserSnapshot is immutable, so we can track changes
+model UserSnapshot {
+  id       String           @id @default(cuid())
+  user     User             @relation(fields: [user_id], references: [id])
+  user_id  String
+  email    Email            @relation(fields: [email_id], references: [id])
+  email_id String
+  username String
+  password String
+  revoked  Boolean          @default(false)
+  groups   UserGroup[]
+  perms    UserPermission[]
+  tokens   UserToken[]
+}
+
+model UserGroup {
+  id        String              @id @default(cuid())
+  name      String              @unique
+  snapshots UserGroupSnapshot[] @relation("group-history")
+  users     UserSnapshot[]
+  parents   UserGroupSnapshot[]
+}
+
+model UserGroupSnapshot {
+  id       String           @id @default(cuid())
+  group    UserGroup        @relation("group-history", fields: [group_id], references: [id])
+  group_id String
+  name     String           @unique
+  perms    UserPermission[]
+  children UserGroup[]
+}
+
+model UserPermission {
+  id     String              @id @default(cuid())
+  name   String              @unique
+  users  UserSnapshot[]
+  groups UserGroupSnapshot[]
+}
+
+model UserToken {
+  id      String       @id @default(cuid())
+  user    UserSnapshot @relation(fields: [user_id], references: [id])
+  user_id String
+  expires DateTime
+  traits  String[]
+}
+
+// Auth End
+
+// Profile Start
+
+model UserProfile {
+  id       String @id @default(cuid())
+  user     User   @relation(fields: [user_id], references: [id])
+  user_id  String @unique
+  name     String
+  bio      String
+  school   String
+  email    String
+  location String
+  banner   String
+  avatar   String
+  extra    Json
+}
+
+// Profile End
+
+// Course Start
+enum CourseType {
+  Compulsory
+  Elective
+  General
+  Other
+}
+
+// Course End
+
+// Entity Start (School System, School, Department, etc.)
+model Entity {
+  id        String    @id @default(cuid())
+  name      String
+  parent    Entity?   @relation("EntityToEntity", fields: [parent_id], references: [id])
+  parent_id String?
+  children  Entity[]  @relation("EntityToEntity")
+  courses   Course[]
+  teachers  Teacher[]
+}
+
+model Teacher {
+  id       String   @id @default(cuid())
+  name     String
+  entities Entity[]
+  courses  Course[]
+}
+
+// We say that a course program is a set of courses
+model CourseProgram {
+  id      String   @id @default(cuid())
+  name    String
+  courses Course[]
+}
+
+model Course {
+  id            String          @id @default(cuid())
+  year          Int
+  term          Int
+  name          String
+  description   String
+  code          String
+  type          CourseType
+  credit        Int
+  extra         Json
+  provider      Entity          @relation(fields: [provider_id], references: [id])
+  provider_id   String
+  programs      CourseProgram[]
+  teachers      Teacher[]
+  prerequisites Course[]        @relation("PrerequisiteToCourse")
+  advanced      Course[]        @relation("PrerequisiteToCourse")
+}
+
+// Entity End

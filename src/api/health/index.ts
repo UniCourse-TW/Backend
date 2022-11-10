@@ -1,20 +1,19 @@
 
-import Router from "@koa/router";
+import UniRouter from "@/router";
 import { prisma } from "@/prisma";
-import { Err, Ok } from "@/response";
 
-const router = new Router();
+const router = new UniRouter();
 
 router.get("/", async ctx => {
     try {
         await prisma.$connect();
 
-        Ok(ctx, {
+        ctx.ok({
             server: "ok",
             database: "ok"
         });
     } catch {
-        Err(ctx, "Not Healthy", {
+        ctx.err("Not Healthy", {
             data: {
                 server: "ok",
                 database: "error"

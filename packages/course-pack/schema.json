@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "PackedEntity": {
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/PackedEntity"
+                    },
+                    "type": "array"
+                },
+                "courses": {
+                    "items": {
+                        "properties": {
+                            "code": {
+                                "type": "string"
+                            },
+                            "credit": {
+                                "type": "number"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "extra": {},
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "prerequisites": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "programs": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "teachers": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "term": {
+                                "type": "number"
+                            },
+                            "type": {
+                                "enum": [
+                                    "Compulsory",
+                                    "Elective",
+                                    "General",
+                                    "Other"
+                                ],
+                                "type": "string"
+                            },
+                            "year": {
+                                "type": "number"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "entities": {
+            "items": {
+                "$ref": "#/definitions/PackedEntity"
+            },
+            "type": "array"
+        },
+        "programs": {
+            "items": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "teachers": {
+            "items": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}

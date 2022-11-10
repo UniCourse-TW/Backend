@@ -34,11 +34,17 @@ Then you may need to install the dependencies at the first time:
 pnpm i
 ```
 
-And build the prisma client:
+Build the packages:
 
 ```sh
 # in the development environment
-prisma db push
+pnpm build:all
+```
+
+Shape the database:
+
+```sh
+pnpm db:push
 ```
 
 ### Run in Development Mode
@@ -50,19 +56,16 @@ pnpm dev
 
 ### Load Data into Database
 
-You may need to download the JSON files via:
+You need to prepare Course Pack files first.
+
+Then load the data into database via `unicourse import`
 
 ```sh
 # in the development environment
-tsx scripts/download-data.ts 110-1 110-2 111-1 ...
+unicourse import data/courses.json
 ```
 
-Then load the data into database via:
-
-```sh
-# in the development environment
-tsx scripts/upload-data.ts data/110-1.json data/110-2.json data/111-1.json ...
-```
+> This action requires a logged-in user.
 
 ### Run in Production Mode
 

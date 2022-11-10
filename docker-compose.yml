@@ -3,7 +3,7 @@ name: UniCourse Backend
 
 services:
   db:
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     container_name: unicourse-backend-db
     restart: unless-stopped
     env_file:
