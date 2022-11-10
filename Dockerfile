@@ -1,27 +1,30 @@
 FROM node:latest as dev
 
 WORKDIR /app
-RUN apt update && apt install -y bash-completion make gcc g++ python3
+RUN apt update && apt install -y bash-completion make g++ python3
 RUN npm i -g pnpm tsx prisma
 
 CMD [ "sleep", "infinity" ]
 
-FROM node:latest as builder
+FROM jacoblincool/node-prisma-alpine:4.5.0 as builder
 
 WORKDIR /app
-RUN apt update && apt install -y bash-completion make gcc g++ python3
+RUN apk add --no-cache --virtual .packages make gcc g++ py3-pip
 RUN npm i -g pnpm
 
 COPY . .
 RUN pnpm i --frozen-lockfile 
-RUN pnpm build && pnpm prune --prod
+RUN pnpm run -r build && pnpm build
+RUN rm -rf node_modules .pnpm-store && pnpm i --prod
+RUN apk del .packages
 
-FROM node:latest as backend
+FROM jacoblincool/node-prisma-alpine:4.5.0 as backend
 
+RUN apk add --no-cache openssl
 WORKDIR /app
+RUN adduser --disabled-password unicourse && chown unicourse:unicourse /app
+USER unicourse
 COPY --from=builder /app .
-RUN useradd -m app && chown -R app /app
-USER app
 
 ENTRYPOINT [ "npm" ]
 CMD [ "start" ]
