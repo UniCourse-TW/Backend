@@ -1,0 +1,31 @@
+{
+    "name": "@unicourse-tw/arborist",
+    "version": "1.0.0-alpha.4",
+    "description": "",
+    "main": "lib/index.js",
+    "module": "lib/index.mjs",
+    "types": "lib/index.d.ts",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "build": "tsup"
+    },
+    "dependencies": {
+        "@unicourse-tw/prisma": "workspace:*"
+    },
+    "devDependencies": {
+        "tsup": "^6.4.0"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
+    }
+}
