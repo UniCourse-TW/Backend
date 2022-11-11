@@ -1,5 +1,5 @@
 import type { CoursePack, PackedEntity, PackedProgram, PackedTeacher } from "course-pack";
-import type { Prisma } from "@unicourse-tw/prisma";
+import { down } from "@unicourse-tw/arborist";
 import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
@@ -17,7 +17,7 @@ router.get("/", async ctx => {
     try {
         const root = await prisma.entity.findUnique({
             where: { id: node },
-            ...recursive_search({
+            ...down({
                 include: {
                     courses: {
                         include: {
@@ -143,29 +143,3 @@ router.get("/", async ctx => {
 });
 
 export default router;
-
-type Args = Prisma.EntityFindUniqueArgsBase;
-type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...0[]];
-type RecArgs<T extends Partial<Args>, N extends number = 6> = Prev[N] extends never
-    ? T
-    : T & {
-        include: {
-            children: RecArgs<T, Prev[N]>
-        }
-    };
-
-export function recursive_search<T extends Partial<Args>, N extends number = 6>(
-    find: T = {} as T,
-    depth: N = 6 as N
-): RecArgs<T, Prev[N]> {
-    if (depth <= 0) {
-        return find as RecArgs<T, Prev[N]>;
-    }
-    return {
-        ...find,
-        include: {
-            ...find.include,
-            children: recursive_search(find, depth - 1)
-        }
-    };
-}
