@@ -35,6 +35,9 @@ model User {
   id        String         @id @default(cuid())
   snapshots UserSnapshot[]
   profile   UserProfile?
+  posts     Post[]         @relation("PostToAuthor")
+  upvoted   Post[]         @relation("PostToUpVoter")
+  downvoted Post[]         @relation("PostToDownVoter")
 }
 
 // UserSnapshot is immutable, so we can track changes
@@ -155,6 +158,43 @@ model Course {
   teachers      Teacher[]
   prerequisites Course[]        @relation("PrerequisiteToCourse")
   advanced      Course[]        @relation("PrerequisiteToCourse")
+  Post          Post[]
 }
 
 // Entity End
+
+// Post Start
+
+enum PostType {
+  Announcement
+  Article
+  Question
+  Reply
+  Other
+}
+
+model PostTag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  type      PostType
+  title     String
+  content   String
+  updated   DateTime? @updatedAt
+  author    User      @relation("PostToAuthor", fields: [author_id], references: [id])
+  author_id String
+  vote_up   User[]    @relation("PostToUpVoter")
+  vote_down User[]    @relation("PostToDownVoter")
+  tags      PostTag[]
+  course    Course?   @relation(fields: [course_id], references: [id])
+  course_id String?
+  parent    Post?     @relation("PostToPost", fields: [parent_id], references: [id])
+  parent_id String?
+  children  Post[]    @relation("PostToPost")
+}
+
+// Post End
