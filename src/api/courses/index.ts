@@ -1,4 +1,5 @@
 import { SearchError, default_course_search } from "@unicourse-tw/course-search";
+import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import key from "./key";
 import debug from "@/debug";
@@ -9,7 +10,7 @@ const log = debug("api:course");
 const router = new UniRouter();
 
 const query = z.object({
-    q: z.string().min(1)
+    q: v.query
 });
 
 router.get("/", async ctx => {

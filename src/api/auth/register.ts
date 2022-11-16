@@ -1,3 +1,4 @@
+import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import argon from "argon2";
 import debug from "@/debug";
@@ -7,9 +8,9 @@ import { prisma } from "@/prisma";
 const log = debug("api:auth:register");
 
 const schema = z.object({
-    username: z.string().min(4).max(64).regex(/^[a-zA-Z0-9_.-]+$/),
-    password: z.string().length(128),
-    email: z.string().max(320).email() // See RFC 5321 4.5.3.1.1. and 4.5.3.1.2.
+    username: v.username,
+    password: v.password,
+    email: v.email
 });
 
 export const router = new UniRouter();

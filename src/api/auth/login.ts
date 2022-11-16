@@ -1,5 +1,6 @@
 import type { Token } from "@unicourse-tw/token";
 import { sign } from "@unicourse-tw/token";
+import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import argon from "argon2";
 import cuid from "cuid";
@@ -10,11 +11,8 @@ import { prisma } from "@/prisma";
 const log = debug("api:auth:login");
 
 const schema = z.object({
-    username: z.union([
-        z.string().max(320).email(),
-        z.string().min(4).max(64).regex(/^[a-zA-Z0-9_.-]+$/)
-    ]),
-    password: z.string().length(128)
+    username: z.union([v.email, v.username]),
+    password: v.password
 });
 
 export const router = new UniRouter();

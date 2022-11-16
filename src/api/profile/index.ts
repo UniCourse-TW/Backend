@@ -1,3 +1,4 @@
+import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import debug from "@/debug";
 import UniRouter from "@/router";
@@ -56,12 +57,12 @@ router.patch("/:username", async ctx => {
 
         const schema = z.object({
             name: z.string().min(1).max(64).optional(),
-            bio: z.string().max(1024).optional(),
-            school: z.string().max(1024).optional(),
-            email: z.string().email().max(1024).optional(),
-            location: z.string().max(1024).optional(),
-            banner: z.string().url().max(1024).optional(),
-            avatar: z.string().url().max(1024).optional(),
+            bio: v.string.optional(),
+            school: v.string.optional(),
+            email: v.email.optional(),
+            location: v.string.optional(),
+            banner: v.url.optional(),
+            avatar: v.url.optional(),
             extra: z.object({}).optional()
         }).strict();
 
