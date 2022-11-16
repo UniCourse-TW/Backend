@@ -25,12 +25,10 @@ router.get("/", async ctx => {
 
         ctx.ok(courses);
     } catch (error) {
-        if (error instanceof z.ZodError) {
-            ctx.err(error.message, { code: 400 });
-        } else if (error instanceof SearchError) {
+        if (error instanceof SearchError) {
             ctx.err(error.message, { code: 400 });
         } else {
-            ctx.err("Internal server error");
+            throw error;
         }
     }
 });
