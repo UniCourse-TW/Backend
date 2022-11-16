@@ -19,6 +19,7 @@ importers:
       '@unicourse-tw/course-search': workspace:*
       '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
+      '@unicourse-tw/validation': workspace:*
       argon2: ^0.30.1
       commander: ^9.4.1
       course-pack: workspace:*
@@ -46,6 +47,7 @@ importers:
       '@unicourse-tw/course-search': link:packages/search
       '@unicourse-tw/prisma': link:packages/prisma
       '@unicourse-tw/token': link:packages/token
+      '@unicourse-tw/validation': link:packages/validation
       argon2: 0.30.1_supports-color@8.1.1
       course-pack: link:packages/course-pack
       cuid: 2.1.8
@@ -168,6 +170,15 @@ importers:
       tsup: 6.4.0_typescript@4.8.4
       typedoc: 0.23.20_typescript@4.8.4
       typescript: 4.8.4
+
+  packages/validation:
+    specifiers:
+      '@unicourse-tw/prisma': workspace:*
+      tsup: ^6.4.0
+    dependencies:
+      '@unicourse-tw/prisma': link:../prisma
+    devDependencies:
+      tsup: 6.4.0
 
 packages:
 

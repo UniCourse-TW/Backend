@@ -25,6 +25,7 @@
         "@unicourse-tw/course-search": "workspace:*",
         "@unicourse-tw/prisma": "workspace:*",
         "@unicourse-tw/token": "workspace:*",
+        "@unicourse-tw/validation": "workspace:*",
         "argon2": "^0.30.1",
         "course-pack": "workspace:*",
         "cuid": "^2.1.8",
