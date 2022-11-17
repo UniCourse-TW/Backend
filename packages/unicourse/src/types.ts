@@ -116,6 +116,7 @@ export type EndpointTree = {
             {
                 server: "ok" | "error"
                 database: "ok" | "error"
+                version: string
             }
         ]
     }
