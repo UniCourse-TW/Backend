@@ -102,6 +102,17 @@ export class UniCourse {
             headers.set(key, value);
         }
 
+        if (
+            options.body && typeof options.body === "object"
+            && (options.method === undefined || options.method === "GET")
+        ) {
+            const params = new URLSearchParams();
+            for (const [key, value] of Object.entries(options.body)) {
+                params.set(key, value);
+            }
+            path += `?${params.toString()}`;
+        }
+
         log("request", path, options);
         const response = await fetch(`${this.server}/${path}`, {
             ...options,
