@@ -19,7 +19,6 @@ export const username = z.preprocess(
 
 /**
  * UniCourse Email.
- * See RFC 5321 `4.5.3.1.1.` and `4.5.3.1.2.`
  */
 export const email = z.string()
     .max(CONFIG.EMAIL_MAX_LENGTH, {

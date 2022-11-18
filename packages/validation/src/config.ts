@@ -7,6 +7,7 @@ import type { PostType } from "@unicourse-tw/prisma";
 export const CONFIG = {
     USERNAME_MIN_LENGTH: 4,
     USERNAME_MAX_LENGTH: 64,
+    /** See RFC 5321 `4.5.3.1.1.` and `4.5.3.1.2.` */
     EMAIL_MAX_LENGTH: 320,
     LIMIT_DEFAULT: 20,
     LIMIT_MAX: 100,
