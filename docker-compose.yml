@@ -17,6 +17,9 @@ services:
     build:
       context: .
       target: backend
+      args:
+        - UNICOURSE_VER=${UNICOURSE_VER}
+        - GIT_COMMIT=${GIT_COMMIT}
     image: unicourse-backend:latest
     container_name: unicourse-backend
     restart: unless-stopped
