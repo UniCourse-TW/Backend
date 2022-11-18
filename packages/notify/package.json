@@ -1,6 +1,6 @@
 {
     "name": "@unicourse-tw/notify",
-    "version": "1.0.0-alpha.4",
+    "version": "1.0.0-alpha.5",
     "description": "",
     "main": "lib/index.js",
     "module": "lib/index.mjs",
