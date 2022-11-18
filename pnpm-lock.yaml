@@ -17,6 +17,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.42.0
       '@typescript-eslint/parser': ^5.42.0
       '@unicourse-tw/course-search': workspace:*
+      '@unicourse-tw/notify': workspace:*
       '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
       argon2: ^0.30.1
@@ -44,6 +45,7 @@ importers:
       '@koa/router': 12.0.0
       '@prisma/client': 4.5.0_prisma@4.5.0
       '@unicourse-tw/course-search': link:packages/search
+      '@unicourse-tw/notify': link:packages/notify
       '@unicourse-tw/prisma': link:packages/prisma
       '@unicourse-tw/token': link:packages/token
       argon2: 0.30.1_supports-color@8.1.1
@@ -112,6 +114,17 @@ importers:
     dependencies:
       '@unicourse-tw/prisma': link:../prisma
       zod: 3.19.1
+    devDependencies:
+      tsup: 6.4.0
+
+  packages/notify:
+    specifiers:
+      '@types/nodemailer': ^6.4.6
+      nodemailer: ^6.8.0
+      tsup: ^6.4.0
+    dependencies:
+      '@types/nodemailer': 6.4.6
+      nodemailer: 6.8.0
     devDependencies:
       tsup: 6.4.0
 
@@ -1261,7 +1274,12 @@ packages:
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
-    dev: true
+
+  /@types/nodemailer/6.4.6:
+    resolution: {integrity: sha512-pD6fL5GQtUKvD2WnPmg5bC2e8kWCAPDwMPmHe/ohQbW+Dy0EcHgZ2oCSuPlWNqk74LS5BVMig1SymQbFMPPK3w==}
+    dependencies:
+      '@types/node': 18.11.9
+    dev: false
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -4558,6 +4576,11 @@ packages:
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
+
+  /nodemailer/6.8.0:
+    resolution: {integrity: sha512-EjYvSmHzekz6VNkNd12aUqAco+bOkRe3Of5jVhltqKhEsjw/y0PYPJfp83+s9Wzh1dspYAkUW/YNQ350NATbSQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt/5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
