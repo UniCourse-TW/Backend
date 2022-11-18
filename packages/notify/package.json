@@ -1,16 +1,32 @@
 {
-  "name": "@unicourse-tw/notify",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/nodemailer": "^6.4.6",
-    "nodemailer": "^6.8.0"
-  }
+    "name": "@unicourse-tw/notify",
+    "version": "1.0.0-alpha.4",
+    "description": "",
+    "main": "lib/index.js",
+    "module": "lib/index.mjs",
+    "types": "lib/index.d.ts",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "build": "tsup"
+    },
+    "dependencies": {
+        "@types/nodemailer": "^6.4.6",
+        "nodemailer": "^6.8.0"
+    },
+    "devDependencies": {
+        "tsup": "^6.4.0"
+    },
+    "homepage": "https://github.com/UniCourse-TW/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/UniCourse-TW/Backend.git"
+    },
+    "bugs": {
+        "url": "https://github.com/UniCourse-TW/UniCourse/issues"
+    }
 }

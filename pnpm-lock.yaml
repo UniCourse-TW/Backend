@@ -17,6 +17,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^5.42.0
       '@typescript-eslint/parser': ^5.42.0
       '@unicourse-tw/course-search': workspace:*
+      '@unicourse-tw/notify': workspace:*
       '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
       argon2: ^0.30.1
@@ -44,6 +45,7 @@ importers:
       '@koa/router': 12.0.0
       '@prisma/client': 4.5.0_prisma@4.5.0
       '@unicourse-tw/course-search': link:packages/search
+      '@unicourse-tw/notify': link:packages/notify
       '@unicourse-tw/prisma': link:packages/prisma
       '@unicourse-tw/token': link:packages/token
       argon2: 0.30.1_supports-color@8.1.1
@@ -119,9 +121,12 @@ importers:
     specifiers:
       '@types/nodemailer': ^6.4.6
       nodemailer: ^6.8.0
+      tsup: ^6.4.0
     dependencies:
       '@types/nodemailer': 6.4.6
       nodemailer: 6.8.0
+    devDependencies:
+      tsup: 6.4.0
 
   packages/prisma:
     specifiers:
