@@ -44,7 +44,19 @@ export class UniCourse {
      */
     public use(token: string): void {
         this._raw_token = token;
-        this.token = decode(token);
+        const result = decode<{
+            user: string
+            traits: string[]
+            iat: number
+            exp: number
+            jti: string
+        }>(token);
+        this.token = {
+            token: result.jti,
+            username: result.user,
+            expires: result.exp,
+            traits: result.traits
+        };
     }
 
     /**
