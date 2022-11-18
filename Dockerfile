@@ -20,6 +20,11 @@ RUN apk del .packages
 
 FROM jacoblincool/node-prisma-alpine:4.5.0 as backend
 
+ARG UNICOURSE_VER=
+ARG GIT_COMMIT=
+ENV UNICOURSE_VER=${UNICOURSE_VER}
+ENV GIT_COMMIT=${GIT_COMMIT}
+
 RUN apk add --no-cache openssl
 WORKDIR /app
 RUN adduser --disabled-password unicourse && chown unicourse:unicourse /app
