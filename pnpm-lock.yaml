@@ -167,6 +167,7 @@ importers:
       course-pack: workspace:*
       cross-fetch: ^3.1.5
       debug: ^4.3.4
+      jwt-decode: ^3.1.2
       tsup: ^6.4.0
       typedoc: ^0.23.20
       typescript: ^4.8.4
@@ -177,6 +178,7 @@ importers:
       course-pack: link:../course-pack
       cross-fetch: 3.1.5
       debug: 4.3.4
+      jwt-decode: 3.1.2
       zod: 3.19.1
     devDependencies:
       '@types/debug': 4.1.7
@@ -4219,6 +4221,10 @@ packages:
     dependencies:
       jwa: 1.4.1
       safe-buffer: 5.2.1
+    dev: false
+
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
   /keygrip/1.1.0:

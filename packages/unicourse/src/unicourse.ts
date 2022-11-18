@@ -1,7 +1,7 @@
 import fetch from "cross-fetch";
 import debug from "debug";
 import type { Token } from "@unicourse-tw/token";
-import { decode } from "@unicourse-tw/token";
+import decode from "jwt-decode";
 import type { CoursePack } from "course-pack";
 import { verify as verify_course_pack } from "course-pack";
 import { hash } from "./hash";
