@@ -2,6 +2,7 @@ import type {
     Course,
     CourseProgram,
     Entity,
+    Invitation,
     Post,
     PostType,
     Teacher,
@@ -92,6 +93,7 @@ export type EndpointTree = {
                     username: string
                     password: string
                     email: string
+                    invitation?: string
                 },
                 {
                     username: string
@@ -257,6 +259,7 @@ export type EndpointTree = {
                 groups: {
                     name: string
                 }[]
+                invitations: Invitation[]
             }
         ]
     }
