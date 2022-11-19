@@ -30,14 +30,14 @@ router.post("/login", async ctx => {
         },
         orderBy: { id: "desc" },
         include: {
-            perms: { select: { id: true } },
+            perms: { select: { name: true } },
             groups: {
                 include: {
                     snapshots: {
                         orderBy: { id: "desc" },
                         take: 1,
                         include: {
-                            perms: { select: { id: true } }
+                            perms: { select: { name: true } }
                         }
                     }
                 }
@@ -66,8 +66,8 @@ router.post("/login", async ctx => {
         username: account.username,
         expires: Math.floor(Date.now() / 1000) + 60 * 60,
         traits: [...new Set([
-            ...account.perms.map(p => p.id),
-            ...account.groups.flatMap(g => g.snapshots[0].perms.map(p => p.id)),
+            ...account.perms.map(p => p.name),
+            ...account.groups.flatMap(g => g.snapshots[0].perms.map(p => p.name)),
             ...(account.email?.verified ? ["verified"] : [])
         ])]
     };
