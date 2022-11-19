@@ -4,6 +4,7 @@ import argon from "argon2";
 import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
+import { send_verification_email } from "@/action";
 
 const log = debug("api:auth:register");
 
@@ -39,7 +40,7 @@ router.post("/register", async ctx => {
 
     const user = await prisma.user.create({ data: {} });
 
-    await prisma.userSnapshot.create({
+    const snapshot = await prisma.userSnapshot.create({
         data: {
             user: { connect: { id: user.id } },
             email: {
@@ -68,6 +69,9 @@ router.post("/register", async ctx => {
     });
 
     ctx.ok({ username, email });
+    send_verification_email(snapshot.email_id).catch(err => {
+        log("Failed to send verification email: %O", err);
+    });
 });
 
 export default router;

@@ -41,7 +41,8 @@ router.post("/login", async ctx => {
                         }
                     }
                 }
-            }
+            },
+            email: { select: { verified: true } }
         }
     });
 
@@ -66,7 +67,8 @@ router.post("/login", async ctx => {
         expires: Math.floor(Date.now() / 1000) + 60 * 60,
         traits: [...new Set([
             ...account.perms.map(p => p.id),
-            ...account.groups.flatMap(g => g.snapshots[0].perms.map(p => p.id))
+            ...account.groups.flatMap(g => g.snapshots[0].perms.map(p => p.id)),
+            ...(account.email?.verified ? ["verified"] : [])
         ])]
     };
     log("creating token %s for %s with traits %o", token.token, token.username, token.traits);
