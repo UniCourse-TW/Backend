@@ -1,6 +1,7 @@
 import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
+import { dispatch_daily_invitation } from "@/action";
 
 const log = debug("api:me");
 const router = new UniRouter();
@@ -58,6 +59,8 @@ router.get("/", async ctx => {
         ctx.err("Profile not found", { code: 404 });
         return;
     }
+
+    await dispatch_daily_invitation(snapshot.user_id);
 
     const invitations = await prisma.invitation.findMany({
         where: { from: snapshot.user.id }
