@@ -99,6 +99,24 @@ export type EndpointTree = {
                 }
             ]
         }
+        "send-verify": {
+            [POST]: [
+                never,
+                {
+                    email: string
+                }
+            ]
+        }
+        verify: {
+            [GET]: [
+                {
+                    id: string
+                },
+                {
+                    success: true
+                }
+            ]
+        }
     }
     courses: {
         [POST]: [
