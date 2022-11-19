@@ -15,7 +15,7 @@ const command = new Command("status")
             const padding = Math.max(...Object.keys(status).map(k => k.length)) + 2;
             for (const [key, value] of Object.entries(status)) {
                 console.log(key.padStart(padding),
-                    value === "ok"
+                    (value === "ok" || key === "version")
                         ? chalk.green(value)
                         : chalk.red(value));
             }

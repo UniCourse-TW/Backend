@@ -1,23 +1,21 @@
 {
-    "name": "course-pack",
+    "name": "@unicourse-tw/validation",
     "version": "1.0.0-alpha.8",
-    "description": "Course Pack is a serialized collection of courses, instructors, programs and providers.",
-    "keywords": [],
-    "author": "UniCourse (https://github.com/UniCourse-TW)",
-    "license": "MIT",
+    "description": "",
     "main": "lib/index.js",
     "module": "lib/index.mjs",
     "types": "lib/index.d.ts",
+    "keywords": [],
+    "author": "UniCourse (https://github.com/UniCourse-TW)",
+    "license": "MIT",
     "files": [
-        "lib",
-        "schema.json"
+        "lib"
     ],
     "scripts": {
         "build": "tsup"
     },
     "dependencies": {
-        "@unicourse-tw/prisma": "workspace:*",
-        "zod": "^3.19.1"
+        "@unicourse-tw/prisma": "workspace:*"
     },
     "devDependencies": {
         "tsup": "^6.4.0"

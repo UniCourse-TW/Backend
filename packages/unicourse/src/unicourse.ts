@@ -1,9 +1,9 @@
-import fetch from "cross-fetch";
 import debug from "debug";
 import type { Token } from "@unicourse-tw/token";
-import { decode } from "@unicourse-tw/token";
+import decode from "jwt-decode";
 import type { CoursePack } from "course-pack";
 import { verify as verify_course_pack } from "course-pack";
+import fetch from "./fetch";
 import { hash } from "./hash";
 import type {
     EndpointMethod,
@@ -44,7 +44,19 @@ export class UniCourse {
      */
     public use(token: string): void {
         this._raw_token = token;
-        this.token = decode(token);
+        const result = decode<{
+            user: string
+            traits: string[]
+            iat: number
+            exp: number
+            jti: string
+        }>(token);
+        this.token = {
+            token: result.jti,
+            username: result.user,
+            expires: result.exp,
+            traits: result.traits
+        };
     }
 
     /**
@@ -100,6 +112,17 @@ export class UniCourse {
 
         for (const [key, value] of Object.entries(options.headers ?? {})) {
             headers.set(key, value);
+        }
+
+        if (
+            options.body && typeof options.body === "object"
+            && (options.method === undefined || options.method === "GET")
+        ) {
+            const params = new URLSearchParams();
+            for (const [key, value] of Object.entries(options.body)) {
+                params.set(key, value);
+            }
+            path += `?${params.toString()}`;
         }
 
         log("request", path, options);

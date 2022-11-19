@@ -1,4 +1,12 @@
-import type { Course, CourseProgram, Entity, Teacher, UserProfile } from "@unicourse-tw/prisma";
+import type {
+    Course,
+    CourseProgram,
+    Entity,
+    Post,
+    PostType,
+    Teacher,
+    UserProfile
+} from "@unicourse-tw/prisma";
 import type { CoursePack } from "course-pack";
 
 export type MethodInterface = [any, any];
@@ -116,8 +124,91 @@ export type EndpointTree = {
             {
                 server: "ok" | "error"
                 database: "ok" | "error"
+                version: string
             }
         ]
+    }
+    posts: {
+        [GET]: [
+            {
+                q: string
+                limit?: number
+                offset?: number
+                type?: PostType
+            },
+            (Post & {
+                vote: {
+                    up: number
+                    down: number
+                }
+                replies: {
+                    author_id: string
+                    content: string
+                }[]
+            })[]
+        ]
+        [POST]: [{
+            type: PostType
+            title: string
+            content: string
+            tags: string[]
+            course?: string
+        },
+        Post
+        ]
+        tags: {
+            [GET]: [
+                {
+                    q: string
+                    limit?: number
+                    offset?: number
+                },
+                string[]
+            ]
+        }
+        latest: {
+            [GET]: [
+                never,
+                (Post & {
+                    vote: {
+                        up: number
+                        down: number
+                    }
+                    replies: {
+                        author_id: string
+                        content: string
+                    }[]
+                })[]
+            ]
+        }
+    } & {
+        [key: string]: {
+            [GET]: [
+                never,
+                Post
+            ]
+            [PUT]: [
+                never,
+                Post
+            ]
+            replies: {
+                [GET]: [
+                    {
+                        limit: number
+                        offset: number
+                    },
+                    Post[]
+                ]
+            }
+            vote: {
+                [PUT]: [
+                    {
+                        type: 0 | 1 | -1
+                    },
+                    {}
+                ]
+            }
+        }
     }
     profile: {
         [key: string]: {
@@ -228,9 +319,6 @@ export type EndpointRequestInit<
     T extends string = EndpointPath,
     M extends EndpointMethod<T> = EndpointMethod<T>
 > = Omit<RequestInit, "method" | "body"> & ({
-    method: "GET"
-    body?: never
-} | {
     method: M
     body: EndpointRequestBody<
     T,
@@ -238,4 +326,7 @@ export type EndpointRequestInit<
         ? MethodSymbolMapping[M]
         : never
     >
+} | {
+    method: "GET"
+    body?: never
 });

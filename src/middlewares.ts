@@ -1,4 +1,5 @@
 import type { Context, Next } from "koa";
+import { z } from "zod";
 import cuid from "cuid";
 import { verify } from "@unicourse-tw/token";
 import type { UniContext } from "./types";
@@ -103,20 +104,14 @@ export function create_guard(
 }
 
 export async function catcher(ctx: Context, next: Next): Promise<void> {
+    const start_t = Date.now();
+
     try {
-        const start_t = Date.now();
-
         await next();
-
-        const time = Date.now() - start_t;
-        console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${time}ms`);
-        ctx.set("X-Response-Time", time.toString());
-
-        if (ctx.status === 404 && ctx.body === undefined) {
-            Err(ctx, "我們在這找不到任何東西 QQ", { code: 404 });
-        }
     } catch (err) {
-        if (err instanceof Error) {
+        if (err instanceof z.ZodError) {
+            Err(ctx, err.issues.map(i => i.message).join(", "), { code: 400 });
+        } else if (err instanceof Error) {
             const id = cuid();
             await prisma.serverError.create({
                 data: {
@@ -128,5 +123,13 @@ export async function catcher(ctx: Context, next: Next): Promise<void> {
             });
             Err(ctx, `Internal Server Error. ID: #${id}`);
         }
+    }
+
+    const time = Date.now() - start_t;
+    console.log(`${ctx.method} ${ctx.url} ${ctx.status} ${time}ms`);
+    ctx.set("X-Response-Time", time.toString());
+
+    if (ctx.status === 404 && ctx.body === undefined) {
+        Err(ctx, "我們在這找不到任何東西 QQ", { code: 404 });
     }
 }

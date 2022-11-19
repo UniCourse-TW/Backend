@@ -18,8 +18,10 @@ importers:
       '@typescript-eslint/parser': ^5.42.0
       '@unicourse-tw/arborist': workspace:*
       '@unicourse-tw/course-search': workspace:*
+      '@unicourse-tw/notify': workspace:*
       '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
+      '@unicourse-tw/validation': workspace:*
       argon2: ^0.30.1
       commander: ^9.4.1
       course-pack: workspace:*
@@ -46,8 +48,10 @@ importers:
       '@prisma/client': 4.5.0_prisma@4.5.0
       '@unicourse-tw/arborist': link:packages/arborist
       '@unicourse-tw/course-search': link:packages/search
+      '@unicourse-tw/notify': link:packages/notify
       '@unicourse-tw/prisma': link:packages/prisma
       '@unicourse-tw/token': link:packages/token
+      '@unicourse-tw/validation': link:packages/validation
       argon2: 0.30.1_supports-color@8.1.1
       course-pack: link:packages/course-pack
       cuid: 2.1.8
@@ -126,6 +130,17 @@ importers:
     devDependencies:
       tsup: 6.4.0
 
+  packages/notify:
+    specifiers:
+      '@types/nodemailer': ^6.4.6
+      nodemailer: ^6.8.0
+      tsup: ^6.4.0
+    dependencies:
+      '@types/nodemailer': 6.4.6
+      nodemailer: 6.8.0
+    devDependencies:
+      tsup: 6.4.0
+
   packages/prisma:
     specifiers:
       '@prisma/client': ^4.5.0
@@ -163,6 +178,7 @@ importers:
       course-pack: workspace:*
       cross-fetch: ^3.1.5
       debug: ^4.3.4
+      jwt-decode: ^3.1.2
       tsup: ^6.4.0
       typedoc: ^0.23.20
       typescript: ^4.8.4
@@ -173,12 +189,22 @@ importers:
       course-pack: link:../course-pack
       cross-fetch: 3.1.5
       debug: 4.3.4
+      jwt-decode: 3.1.2
       zod: 3.19.1
     devDependencies:
       '@types/debug': 4.1.7
       tsup: 6.4.0_typescript@4.8.4
       typedoc: 0.23.20_typescript@4.8.4
       typescript: 4.8.4
+
+  packages/validation:
+    specifiers:
+      '@unicourse-tw/prisma': workspace:*
+      tsup: ^6.4.0
+    dependencies:
+      '@unicourse-tw/prisma': link:../prisma
+    devDependencies:
+      tsup: 6.4.0
 
 packages:
 
@@ -1272,7 +1298,12 @@ packages:
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
-    dev: true
+
+  /@types/nodemailer/6.4.6:
+    resolution: {integrity: sha512-pD6fL5GQtUKvD2WnPmg5bC2e8kWCAPDwMPmHe/ohQbW+Dy0EcHgZ2oCSuPlWNqk74LS5BVMig1SymQbFMPPK3w==}
+    dependencies:
+      '@types/node': 18.11.9
+    dev: false
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -4203,6 +4234,10 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+    dev: false
+
   /keygrip/1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
@@ -4569,6 +4604,11 @@ packages:
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
+
+  /nodemailer/6.8.0:
+    resolution: {integrity: sha512-EjYvSmHzekz6VNkNd12aUqAco+bOkRe3Of5jVhltqKhEsjw/y0PYPJfp83+s9Wzh1dspYAkUW/YNQ350NATbSQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt/5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
