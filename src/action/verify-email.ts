@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { sendMail } from "@unicourse-tw/notify";
+import { send_mail } from "@unicourse-tw/notify";
 import { prisma } from "@/prisma";
 import { FRONTEND_BASE_URL } from "@/config";
 import { KnownError } from "@/error";
@@ -55,7 +55,7 @@ export async function send_verification_email(id: string): Promise<void> {
         <p>Click the link below to verify your email:</p>
         <a href="${url}">${url}</a>
     `;
-    await sendMail(email.email, "Verify Your UniCourse Account", html);
+    await send_mail(email.email, "Verify Your UniCourse Account", html);
 }
 
 /**
