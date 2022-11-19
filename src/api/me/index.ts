@@ -59,12 +59,17 @@ router.get("/", async ctx => {
         return;
     }
 
+    const invitations = await prisma.invitation.findMany({
+        where: { from: snapshot.user.id }
+    });
+
     const data = {
         username: snapshot.username,
         email: snapshot.email,
         profile: snapshot.user.profile,
         perms: snapshot.perms.map(p => p.name),
-        groups: snapshot.groups
+        groups: snapshot.groups,
+        invitations
     };
 
     ctx.ok(data);
