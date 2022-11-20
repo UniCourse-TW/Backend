@@ -55,8 +55,6 @@ export async function wrap_response(ctx: Context, next: Next): Promise<void> {
     await next();
 }
 
-const perm_cache = new Map<string, string>();
-
 /**
  * Create a token permission guard middleware
  * @param requires The permission required (can be id or name)
@@ -65,35 +63,13 @@ const perm_cache = new Map<string, string>();
 export function create_guard(
     requires: string[] = []
 ): (ctx: Context & UniContext, next: Next) => Promise<void> {
-    const perms = requires.filter(r => cuid.isCuid(r));
-    const deferred = requires.filter(r => !cuid.isCuid(r));
-
     return async function (ctx: Context & UniContext, next: Next): Promise<void> {
         if (!ctx.state.token) {
             ctx.err("Invalid token", { code: 401 });
             return;
         }
 
-        for (let i = deferred.length - 1; i >= 0; i--) {
-            const id = perm_cache.get(deferred[i]);
-            if (id) {
-                perms.push(id);
-                deferred.splice(i, 1);
-                continue;
-            }
-
-            const p = await prisma.userPermission.findFirst({
-                where: { name: deferred[i] }
-            });
-
-            if (p) {
-                perm_cache.set(deferred[i], p.id);
-                perms.push(p.id);
-                deferred.splice(i, 1);
-            }
-        }
-
-        if (perms.some(p => !ctx.state.token.traits.includes(p))) {
+        if (requires.some(p => !ctx.state.token.traits.includes(p))) {
             guard_log("missing perm");
             Err(ctx, "Missing permission", { code: 403 });
             return;

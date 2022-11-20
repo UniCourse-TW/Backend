@@ -38,6 +38,7 @@ model User {
   posts     Post[]         @relation("PostToAuthor")
   upvoted   Post[]         @relation("PostToUpVoter")
   downvoted Post[]         @relation("PostToDownVoter")
+  actions   Action[]
 }
 
 // UserSnapshot is immutable, so we can track changes
@@ -198,3 +199,16 @@ model Post {
 }
 
 // Post End
+
+// Stateful Action Start
+
+model Action {
+  id      String   @id @default(cuid())
+  key     String   @unique @default(cuid())
+  tags    String[]
+  expires DateTime
+  state   Json
+  actors  User[]
+}
+
+// Stateful Action End
