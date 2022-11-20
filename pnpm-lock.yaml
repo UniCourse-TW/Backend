@@ -16,6 +16,7 @@ importers:
       '@types/node': ^18.11.9
       '@typescript-eslint/eslint-plugin': ^5.42.0
       '@typescript-eslint/parser': ^5.42.0
+      '@unicourse-tw/arborist': workspace:*
       '@unicourse-tw/course-search': workspace:*
       '@unicourse-tw/notify': workspace:*
       '@unicourse-tw/prisma': workspace:*
@@ -45,6 +46,7 @@ importers:
     dependencies:
       '@koa/router': 12.0.0
       '@prisma/client': 4.5.0_prisma@4.5.0
+      '@unicourse-tw/arborist': link:packages/arborist
       '@unicourse-tw/course-search': link:packages/search
       '@unicourse-tw/notify': link:packages/notify
       '@unicourse-tw/prisma': link:packages/prisma
@@ -82,6 +84,15 @@ importers:
       tsup: 6.4.0_rlpflyxsp53dgdidn3vadezrry
       tsx: 3.11.0
       typescript: 4.8.4
+
+  packages/arborist:
+    specifiers:
+      '@unicourse-tw/prisma': workspace:*
+      tsup: ^6.4.0
+    dependencies:
+      '@unicourse-tw/prisma': link:../prisma
+    devDependencies:
+      tsup: 6.4.0
 
   packages/cli:
     specifiers:

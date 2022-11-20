@@ -22,6 +22,7 @@
     "dependencies": {
         "@koa/router": "^12.0.0",
         "@prisma/client": "^4.5.0",
+        "@unicourse-tw/arborist": "workspace:*",
         "@unicourse-tw/course-search": "workspace:*",
         "@unicourse-tw/prisma": "workspace:*",
         "@unicourse-tw/token": "workspace:*",
