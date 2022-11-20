@@ -6,6 +6,7 @@ import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 import { IGNORE_INVITATION } from "@/config";
+import { send_verification_email } from "@/action";
 
 const log = debug("api:auth:register");
 
@@ -62,7 +63,7 @@ router.post("/register", async ctx => {
         data: { id: new_user_id }
     });
 
-    await prisma.userSnapshot.create({
+    const snapshot = await prisma.userSnapshot.create({
         data: {
             user: { connect: { id: user.id } },
             email: {
@@ -91,6 +92,9 @@ router.post("/register", async ctx => {
     });
 
     ctx.ok({ username, email });
+    send_verification_email(snapshot.email_id).catch(err => {
+        log("Failed to send verification email: %O", err);
+    });
 });
 
 export default router;

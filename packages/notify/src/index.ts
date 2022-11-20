@@ -2,7 +2,7 @@ import * as nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
 // Create email transporter from config (env var)
-function createTransporter() {
+function create_transporter() {
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
 
@@ -21,10 +21,10 @@ function createTransporter() {
     });
 }
 
-export async function sendMail(
+export async function send_mail(
     to: string, subject: string, body: string
 ): Promise<SMTPTransport.SentMessageInfo> {
-    const transporter = createTransporter();
+    const transporter = create_transporter();
     return transporter.sendMail({
         from: "noreply@unicourse.tw",
         to,
