@@ -90,6 +90,18 @@ model UserToken {
 
 // Auth End
 
+// Invitation Start
+
+model Invitation {
+  id   String    @id @default(cuid())
+  from String // user id
+  to   String? // user id
+  used DateTime?
+  type String
+}
+
+// Invitation End
+
 // Profile Start
 
 model UserProfile {
