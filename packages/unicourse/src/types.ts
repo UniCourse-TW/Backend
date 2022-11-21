@@ -119,6 +119,27 @@ export type EndpointTree = {
                 }
             ]
         }
+        "send-reset": {
+            [POST]: [
+                {
+                    email: string
+                },
+                {
+                    email: string
+                }
+            ]
+        }
+        reset: {
+            [POST]: [
+                {
+                    id: string
+                    password: string
+                },
+                {
+                    success: true
+                }
+            ]
+        }
     }
     courses: {
         [POST]: [
