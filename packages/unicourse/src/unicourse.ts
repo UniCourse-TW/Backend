@@ -157,14 +157,16 @@ export class UniCourse {
     public async register(
         username: string,
         password: string,
-        email: string
+        email: string,
+        { invitation }: { invitation?: string } = {}
     ): Promise<EndpointResponseBody<"auth/register", typeof POST>> {
         return await this.req("auth/register", {
             method: "POST",
             body: {
                 username,
                 password: await hash(password),
-                email
+                email,
+                invitation
             }
         });
     }
