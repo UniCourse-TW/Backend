@@ -8,8 +8,9 @@ const command = new Command("register")
     .description("Register a new account on the UniCourse server")
     .argument("<username>", "Your username")
     .argument("<email>", "Your email")
+    .argument("<invitation>", "The invitation code")
     .option("-s, --server <server>", "The server to register on", config.server || defaults.server)
-    .action(async (username: string, email: string, opt) => {
+    .action(async (username: string, email: string, invitation: string, opt) => {
         const uni = new UniCourse(undefined, { server: opt.server });
 
         const { password } = await inquirer.prompt([
@@ -28,7 +29,7 @@ const command = new Command("register")
         ]);
 
         try {
-            await uni.register(username, password, email);
+            await uni.register(username, password, email, { invitation });
             console.log(chalk.green("Registered successfully"));
 
             const token = await uni.login(username, password);
