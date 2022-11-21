@@ -17,7 +17,8 @@
         "format": "pnpm lint:fix",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "db:push": "prisma db push --schema packages/prisma/prisma/schema.prisma"
+        "db:push": "prisma db push --schema packages/prisma/prisma/schema.prisma",
+        "studio": "prisma studio --schema packages/prisma/prisma/schema.prisma"
     },
     "dependencies": {
         "@koa/router": "^12.0.0",
