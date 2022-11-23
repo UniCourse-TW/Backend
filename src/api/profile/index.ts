@@ -28,7 +28,7 @@ router.get("/:username", async ctx => {
         return;
     }
 
-    ctx.ok({ profile });
+    ctx.ok(profile);
 });
 
 router.patch("/:username", async ctx => {
