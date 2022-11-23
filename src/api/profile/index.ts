@@ -3,6 +3,7 @@ import { z } from "zod";
 import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
+import { resolve_user } from "@/utils";
 
 const log = debug("api:profile");
 const router = new UniRouter();
@@ -11,10 +12,7 @@ router.get("/:username", async ctx => {
     const { username } = ctx.params;
 
     log("getting profile for %s", username);
-    const snapshot = await prisma.userSnapshot.findFirst({
-        where: { username, revoked: false },
-        orderBy: { id: "desc" }
-    });
+    const snapshot = await resolve_user(username);
 
     if (!snapshot) {
         ctx.err("User not found", { code: 404 });
@@ -60,10 +58,7 @@ router.patch("/:username", async ctx => {
     const data = schema.parse(ctx.request.body);
 
     log("updating profile for %s", username);
-    const last = await prisma.userSnapshot.findFirst({
-        where: { username, revoked: false },
-        orderBy: { id: "desc" }
-    });
+    const last = await resolve_user(username);
 
     if (!last) {
         ctx.err("Data not found", { code: 404 });
