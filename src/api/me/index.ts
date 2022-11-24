@@ -2,6 +2,7 @@ import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 import { dispatch_daily_invitation } from "@/action";
+import { resolve_user } from "@/utils";
 
 const log = debug("api:me");
 const router = new UniRouter();
@@ -15,37 +16,33 @@ router.get("/", async ctx => {
     const { username } = ctx.state.token;
 
     log("getting private profile for %s", username);
-    const snapshot = await prisma.userSnapshot.findFirst({
-        where: { username, revoked: false },
-        orderBy: { id: "desc" },
-        include: {
-            user: {
-                include: {
-                    profile: {
-                        select: {
-                            name: true,
-                            bio: true,
-                            school: true,
-                            email: true,
-                            location: true,
-                            banner: true,
-                            avatar: true,
-                            extra: true
-                        }
+    const snapshot = await resolve_user(username, {
+        user: {
+            include: {
+                profile: {
+                    select: {
+                        name: true,
+                        bio: true,
+                        school: true,
+                        email: true,
+                        location: true,
+                        banner: true,
+                        avatar: true,
+                        extra: true
                     }
                 }
-            },
-            perms: {
-                select: { name: true }
-            },
-            groups: {
-                select: { name: true }
-            },
-            email: {
-                select: {
-                    email: true,
-                    verified: true
-                }
+            }
+        },
+        perms: {
+            select: { name: true }
+        },
+        groups: {
+            select: { name: true }
+        },
+        email: {
+            select: {
+                email: true,
+                verified: true
             }
         }
     });

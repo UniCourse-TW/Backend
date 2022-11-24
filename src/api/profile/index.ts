@@ -58,10 +58,15 @@ router.patch("/:username", async ctx => {
     const data = schema.parse(ctx.request.body);
 
     log("updating profile for %s", username);
-    const last = await resolve_user(username);
+    const last = await resolve_user(username, { email: true });
 
     if (!last) {
         ctx.err("Data not found", { code: 404 });
+        return;
+    }
+
+    if (data.email && (data.email !== last.email.email || !last.email.verified)) {
+        ctx.err("The email is not verified to be owned by you", { code: 400 });
         return;
     }
 

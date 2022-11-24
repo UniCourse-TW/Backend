@@ -1,7 +1,7 @@
 import UniRouter from "@/router";
-import { prisma } from "@/prisma";
 import { send_verification_email } from "@/action";
 import { KnownError } from "@/error";
+import { resolve_user } from "@/utils";
 
 export const router = new UniRouter();
 
@@ -11,15 +11,8 @@ router.post("/send-verify", async ctx => {
         return;
     }
 
-    const snapshot = await prisma.userSnapshot.findFirst({
-        where: {
-            username: ctx.state.token.username,
-            revoked: false
-        },
-        orderBy: { id: "desc" },
-        include: {
-            email: { select: { email: true } }
-        }
+    const snapshot = await resolve_user(ctx.state.token.username, {
+        email: { select: { email: true } }
     });
 
     if (!snapshot) {
