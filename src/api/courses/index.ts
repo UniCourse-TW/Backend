@@ -10,17 +10,23 @@ const log = debug("api:course");
 const router = new UniRouter();
 
 const query = z.object({
-    q: v.query
+    q: v.query,
+    offset: v.offset,
+    limit: v.limit
 });
 
 router.get("/", async ctx => {
     try {
-        const { q } = query.parse(ctx.query);
+        const { q, offset, limit } = query.parse(ctx.query);
 
         log("parsing query", q);
         const search = default_course_search(q);
         log("searching courses", search);
-        const courses = await prisma.course.findMany(search);
+        const courses = await prisma.course.findMany({
+            ...search,
+            take: limit,
+            skip: offset
+        });
         log("searching courses done", courses.length);
 
         ctx.ok(courses);
