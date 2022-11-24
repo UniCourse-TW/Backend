@@ -9,7 +9,7 @@ const log = debug("api:profile");
 const router = new UniRouter();
 
 router.get("/:username", async ctx => {
-    const { username } = ctx.params;
+    const username = v.username.parse(ctx.params.username);
 
     log("getting profile for %s", username);
     const snapshot = await resolve_user(username);
@@ -37,7 +37,7 @@ router.patch("/:username", async ctx => {
         return;
     }
 
-    const { username } = ctx.params;
+    const username = v.username.parse(ctx.params.username);
 
     if (username !== ctx.state.token.username && !ctx.state.token.traits.includes("admin")) {
         ctx.err("Not authorized", { code: 403 });
@@ -48,20 +48,25 @@ router.patch("/:username", async ctx => {
         name: z.string().min(1).max(64).optional(),
         bio: v.string.optional(),
         school: v.string.optional(),
-        email: v.email.optional(),
+        email: z.union([z.string().max(0), v.email]).optional(),
         location: v.string.optional(),
-        banner: v.url.optional(),
-        avatar: v.url.optional(),
+        banner: z.union([z.string().max(0), v.url]).optional(),
+        avatar: z.union([z.string().max(0), v.url]).optional(),
         extra: z.object({}).optional()
     }).strict();
 
     const data = schema.parse(ctx.request.body);
 
     log("updating profile for %s", username);
-    const last = await resolve_user(username);
+    const last = await resolve_user(username, { email: true });
 
     if (!last) {
         ctx.err("Data not found", { code: 404 });
+        return;
+    }
+
+    if (data.email && (data.email !== last.email.email || !last.email.verified)) {
+        ctx.err("The email is not verified to be owned by you", { code: 400 });
         return;
     }
 
