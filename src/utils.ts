@@ -21,7 +21,7 @@ export async function resolve_user<T extends Prisma.UserSnapshotInclude>(
             revoked: false
         },
         orderBy: { id: "desc" },
-        include: { ...include }
+        include
     });
 
     if (snapshot) {
@@ -35,7 +35,7 @@ export async function resolve_user<T extends Prisma.UserSnapshotInclude>(
                 where: { revoked: false },
                 orderBy: { id: "desc" },
                 take: 1,
-                include: { ...include }
+                include: include as any
             }
         }
     });
