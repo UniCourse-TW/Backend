@@ -1,13 +1,17 @@
 import { execSync } from "node:child_process";
-import type { UserSnapshot } from "@unicourse-tw/prisma";
+import type { Prisma } from "@unicourse-tw/prisma";
 import { prisma } from "@/prisma";
 
 /**
  * Resolve to latest user snapshot by snapshot id, user id, or username.
  * @param identifier Snapshot id, user id, or username.
+ * @param include `include` option for Prisma.
  * @returns Latest user snapshot.
  */
-export async function resolve_user(identifier: string): Promise<UserSnapshot | null> {
+export async function resolve_user<T extends Prisma.UserSnapshotInclude>(
+    identifier: string,
+    include?: T
+): Promise<ReturnType<typeof prisma.userSnapshot.findFirst<{ include: T }>>> {
     const snapshot = await prisma.userSnapshot.findFirst({
         where: {
             OR: [
@@ -16,11 +20,12 @@ export async function resolve_user(identifier: string): Promise<UserSnapshot | n
             ],
             revoked: false
         },
-        orderBy: { id: "desc" }
+        orderBy: { id: "desc" },
+        include: { ...include }
     });
 
     if (snapshot) {
-        return snapshot;
+        return snapshot as any;
     }
 
     const user = await prisma.user.findFirst({
@@ -29,13 +34,14 @@ export async function resolve_user(identifier: string): Promise<UserSnapshot | n
             snapshots: {
                 where: { revoked: false },
                 orderBy: { id: "desc" },
-                take: 1
+                take: 1,
+                include: { ...include }
             }
         }
     });
 
-    if (user) {
-        return user.snapshots[0];
+    if (user && user.snapshots.length > 0) {
+        return user.snapshots[0] as any;
     }
 
     return null;
