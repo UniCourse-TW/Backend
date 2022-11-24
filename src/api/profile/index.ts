@@ -9,7 +9,7 @@ const log = debug("api:profile");
 const router = new UniRouter();
 
 router.get("/:username", async ctx => {
-    const { username } = ctx.params;
+    const username = v.username.parse(ctx.params.username);
 
     log("getting profile for %s", username);
     const snapshot = await resolve_user(username);
@@ -37,7 +37,7 @@ router.patch("/:username", async ctx => {
         return;
     }
 
-    const { username } = ctx.params;
+    const username = v.username.parse(ctx.params.username);
 
     if (username !== ctx.state.token.username && !ctx.state.token.traits.includes("admin")) {
         ctx.err("Not authorized", { code: 403 });
