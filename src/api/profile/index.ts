@@ -48,10 +48,10 @@ router.patch("/:username", async ctx => {
         name: z.string().min(1).max(64).optional(),
         bio: v.string.optional(),
         school: v.string.optional(),
-        email: v.email.optional(),
+        email: z.union([z.string().max(0), v.email]).optional(),
         location: v.string.optional(),
-        banner: v.url.optional(),
-        avatar: v.url.optional(),
+        banner: z.union([z.string().max(0), v.url]).optional(),
+        avatar: z.union([z.string().max(0), v.url]).optional(),
         extra: z.object({}).optional()
     }).strict();
 
