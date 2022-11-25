@@ -3,7 +3,12 @@ import { SearchError } from "./errors";
 import { parse_query } from "./parser";
 import { date2term } from "./date";
 
-export function default_course_search(q: string): Prisma.CourseFindManyArgs {
+export function default_course_search(q: string): {
+    include: {
+        provider: true
+        programs: true
+        teachers: true
+    } } & Prisma.CourseFindManyArgs {
     const map = parse_query(q);
 
     if (Object.keys(map).length === 0) {
@@ -28,32 +33,70 @@ export function default_course_search(q: string): Prisma.CourseFindManyArgs {
         });
     }
 
+    if ((map.provider?.length ?? 0) > 0) {
+        conditions.push({
+            provider: {
+                OR: [
+                    ...map.provider.map(p => ({ id: p })),
+                    ...map.provider.map(p => ({ name: { contains: p } }))
+                ]
+            }
+        });
+    }
+
     if (wilds.length > 0) {
         conditions.push({ OR: wilds.map(w => ({ name: { contains: w } })) });
         conditions.push({ code: { in: wilds } });
     }
 
-    let [year, term] = date2term();
-    year = parseInt(map.year?.[0]) || year;
-    term = parseInt(map.term?.[0]) || term;
+    const time_conditions: Prisma.Enumerable<Prisma.CourseWhereInput> = [];
+    if (!map.term) {
+        const [year, term] = date2term();
+        time_conditions.push({ year, term });
+    } else {
+        for (const raw of map.term) {
+            const [year, term] = raw.split("-").map(x => parseInt(x));
+            if (!isNaN(year) && !isNaN(term)) {
+                time_conditions.push({ year, term });
+            }
+        }
+    }
+
+    const sort = map.sort?.[0] === "asc" ? "asc" : "desc";
+
+    const order: Prisma.Enumerable<Prisma.CourseOrderByWithRelationAndSearchRelevanceInput> = [];
+    if (!map.order) {
+        order.push({
+            _relevance: {
+                fields: ["name", "description"],
+                search: wilds.join(" "),
+                sort
+            }
+        });
+    } else {
+        const simple_keys = ["name", "code", "credit", "year", "term", "type"];
+        const complex_keys = ["teachers", "programs", "prerequisites"];
+        for (const key of map.order) {
+            if (simple_keys.includes(key)) {
+                order.push({ [key]: sort });
+            } else if (complex_keys.includes(key)) {
+                order.push({ [key]: { _count: sort } });
+            }
+        }
+    }
 
     return {
         where: {
-            OR: conditions,
-            year,
-            term
+            AND: [
+                { OR: conditions },
+                { OR: time_conditions }
+            ]
         },
         include: {
             provider: true,
             programs: true,
             teachers: true
         },
-        orderBy: {
-            _relevance: {
-                fields: ["name", "description"],
-                search: wilds.join(" "),
-                sort: "desc"
-            }
-        }
+        orderBy: order
     };
 }

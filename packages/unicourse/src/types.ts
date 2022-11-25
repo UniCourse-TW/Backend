@@ -145,6 +145,8 @@ export type EndpointTree = {
         [POST]: [
             {
                 q: string
+                limit?: number
+                offset?: number
             },
             Course[]
         ]

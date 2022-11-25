@@ -6,10 +6,12 @@ This is the course search module for UniCourse.
 
 The default course search supports the following advanced search keywords:
 
-- `teacher:someone`
-- `program:something`
-- `year:someyear`
-- `term:someterm`
+- `teacher:<someone>`
+- `program:<something>`
+- `provider:<something>`
+- `term:<year>-<term>`
+- `sort:<direction>` (`desc` (default) or `asc`)
+- `order:<type>` (`relevance` (default), `name`, `code`, `credit`, `year`, `term`, `type`, `teachers`, `programs`, `prerequisites`)
 
 `key=value`, `key="more value"` syntax is also supported.
 
