@@ -142,7 +142,7 @@ export type EndpointTree = {
         }
     }
     courses: {
-        [POST]: [
+        [GET]: [
             {
                 q: string
                 limit?: number
