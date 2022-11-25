@@ -123,6 +123,7 @@ export class UniCourse {
                 params.set(key, value);
             }
             path += `?${params.toString()}`;
+            options.body = undefined;
         }
 
         log("request", path, options);
