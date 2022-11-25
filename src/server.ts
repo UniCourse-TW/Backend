@@ -17,7 +17,7 @@ const router = new UniRouter()
     .use("/auth", auth.routes())
     .use("/courses", create_guard(["verified"]), courses.routes())
     .use("/posts", create_guard(["verified"]), posts.routes())
-    .use("/profile", create_guard(["verified"]), profile.routes())
+    .use("/profile", create_guard(), profile.routes())
     .use("/manage", create_guard(["moderator", "verified"]), manage.routes())
     .use("/me", create_guard(), me.routes());
 

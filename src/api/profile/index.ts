@@ -28,6 +28,12 @@ router.get("/:username", async ctx => {
         return;
     }
 
+    if (!ctx.state.token || !ctx.state.token.traits.includes("verified")) {
+        profile.email = "";
+        profile.location = "";
+        profile.school = "";
+    }
+
     ctx.ok(profile);
 });
 
