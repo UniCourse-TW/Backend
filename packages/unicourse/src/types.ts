@@ -317,6 +317,32 @@ export type EndpointTree = {
             }
         ]
     }
+    state: {
+        users: {
+            [GET]: [
+                never,
+                {
+                    count: number
+                }
+            ]
+        }
+        posts: {
+            [GET]: [
+                never,
+                {
+                    count: number
+                }
+            ]
+        }
+        courses: {
+            [GET]: [
+                never,
+                {
+                    count: number
+                }
+            ]
+        }
+    }
 };
 
 export type EndpointPath = PathBuilder<EndpointTree>;
