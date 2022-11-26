@@ -148,7 +148,11 @@ export type EndpointTree = {
                 limit?: number
                 offset?: number
             },
-            Course[]
+            (Course & {
+                provider: Entity
+                programs: CourseProgram[]
+                teachers: Teacher[]
+            })[]
         ]
         [key: string]: {
             [GET]: [
@@ -190,14 +194,15 @@ export type EndpointTree = {
                 }[]
             })[]
         ]
-        [POST]: [{
-            type: PostType
-            title: string
-            content: string
-            tags: string[]
-            course?: string
-        },
-        Post
+        [POST]: [
+            {
+                type: PostType
+                title: string
+                content: string
+                tags: string[]
+                course?: string
+            },
+            Post
         ]
         tags: {
             [GET]: [
@@ -274,6 +279,14 @@ export type EndpointTree = {
                     courses: string[]
                     programs: string[]
                 }
+            ]
+        }
+        export: {
+            [GET]: [
+                {
+                    node: string
+                },
+                CoursePack
             ]
         }
     }
