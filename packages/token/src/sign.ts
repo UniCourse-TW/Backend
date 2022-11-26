@@ -15,7 +15,8 @@ export function sign(token: Token, options?: jwt.SignOptions): string {
     }
 
     return jwt.sign({
-        user: token.username,
+        user: token.user,
+        username: token.username,
         traits: token.traits
     }, process.env.JWT_SECRET ?? "unicourse", {
         expiresIn: exp,
