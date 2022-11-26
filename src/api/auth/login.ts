@@ -63,6 +63,7 @@ router.post("/login", async ctx => {
 
     const token: Token = {
         token: cuid(),
+        user: account.user_id,
         username: account.username,
         expires: Math.floor(Date.now() / 1000) + 60 * 60,
         traits: [...new Set([
