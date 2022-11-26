@@ -1,4 +1,5 @@
 import { v } from "@unicourse-tw/validation";
+import type { EndpointResponseBody, GET } from "unicourse";
 import { z } from "zod";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
@@ -28,7 +29,7 @@ router.get("/", async ctx => {
         }
     });
 
-    ctx.ok(tags.map(tag => tag.name));
+    ctx.ok<EndpointResponseBody<"posts/tags", typeof GET>>(tags.map(tag => tag.name));
 });
 
 export default router;

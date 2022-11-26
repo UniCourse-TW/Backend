@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, GET } from "unicourse";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 
@@ -20,7 +21,7 @@ router.get("/", async ctx => {
         return;
     }
 
-    ctx.ok(course);
+    ctx.ok<EndpointResponseBody<`courses/${string}`, typeof GET>>(course);
 });
 
 export default router;

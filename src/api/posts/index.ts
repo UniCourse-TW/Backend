@@ -1,6 +1,7 @@
 import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import { PostType } from "@unicourse-tw/prisma";
+import type { EndpointResponseBody, GET, POST } from "unicourse";
 import latest from "./latest";
 import tags from "./tags";
 import key from "./key";
@@ -71,7 +72,7 @@ router.get("/", async ctx => {
         children: undefined
     }));
 
-    ctx.ok(result);
+    ctx.ok<EndpointResponseBody<"posts", typeof GET>>(result);
 });
 
 router.post("/", async ctx => {
@@ -108,7 +109,7 @@ router.post("/", async ctx => {
         }
     });
 
-    ctx.ok(post);
+    ctx.ok<EndpointResponseBody<"posts", typeof POST>>(post);
 });
 
 router.use("/latest", latest.routes());

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { EndpointResponseBody, GET } from "unicourse";
 import UniRouter from "@/router";
 import { verify_email } from "@/action";
 import { KnownError } from "@/error";
@@ -10,7 +11,7 @@ router.get("/verify", async ctx => {
 
     try {
         await verify_email(id);
-        ctx.ok({ success: true });
+        ctx.ok<EndpointResponseBody<"auth/verify", typeof GET>>({ success: true });
     } catch (err) {
         if (err instanceof KnownError) {
             ctx.err(err.message, { code: 400 });

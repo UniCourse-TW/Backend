@@ -1,4 +1,5 @@
 import { v } from "@unicourse-tw/validation";
+import type { EndpointResponseBody, GET, PUT } from "unicourse";
 import vote from "./vote";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
@@ -18,7 +19,7 @@ router.get("/", async ctx => {
         return;
     }
 
-    ctx.ok(post);
+    ctx.ok<EndpointResponseBody<`posts/${string}`, typeof GET>>(post);
 });
 
 router.put("/", async ctx => {
@@ -68,7 +69,7 @@ router.put("/", async ctx => {
         }
     });
 
-    ctx.ok(result);
+    ctx.ok<EndpointResponseBody<`posts/${string}`, typeof PUT>>(result);
 });
 
 router.use("/vote", vote.routes());

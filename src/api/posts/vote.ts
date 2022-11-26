@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { EndpointResponseBody, PUT } from "unicourse";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 import { resolve_user } from "@/utils";
@@ -71,7 +72,7 @@ router.put("/", async ctx => {
         });
     }
 
-    ctx.ok({});
+    ctx.ok<EndpointResponseBody<`posts/${string}/vote`, typeof PUT>>({});
 });
 
 export default router;

@@ -1,4 +1,5 @@
 import type { CoursePack, PackedEntity, PackedProgram, PackedTeacher } from "course-pack";
+import type { EndpointResponseBody, GET } from "unicourse";
 import { down } from "@unicourse-tw/arborist";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
@@ -132,7 +133,7 @@ router.get("/", async ctx => {
         entities: [tree]
     };
 
-    ctx.ok(pack);
+    ctx.ok<EndpointResponseBody<"manage/export", typeof GET>>(pack);
 });
 
 export default router;

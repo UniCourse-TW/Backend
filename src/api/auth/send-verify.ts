@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, POST } from "unicourse";
 import UniRouter from "@/router";
 import { send_verification_email } from "@/action";
 import { KnownError } from "@/error";
@@ -22,7 +23,9 @@ router.post("/send-verify", async ctx => {
 
     try {
         await send_verification_email(snapshot.email_id);
-        ctx.ok({ email: snapshot.email.email });
+        ctx.ok<EndpointResponseBody<"auth/send-verify", typeof POST>>({
+            email: snapshot.email.email
+        });
     } catch (err) {
         if (err instanceof KnownError) {
             ctx.err(err.message, { code: 400 });
