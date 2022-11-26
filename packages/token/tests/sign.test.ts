@@ -4,6 +4,7 @@ describe("sign", () => {
     test("accepted", () => {
         const token = {
             token: "cuid",
+            user: "cuid-user",
             username: "username",
             expires: Math.floor(Date.now() / 1_000) + 60,
             traits: ["trait"]
@@ -18,6 +19,7 @@ describe("sign", () => {
     test("expired", () => {
         const token = {
             token: "cuid",
+            user: "cuid-user",
             username: "username",
             expires: Math.floor(Date.now() / 1_000) - 1,
             traits: ["trait"]
