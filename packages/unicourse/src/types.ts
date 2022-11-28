@@ -317,7 +317,7 @@ export type EndpointTree = {
             }
         ]
     }
-    state: {
+    stats: {
         users: {
             [GET]: [
                 never,
