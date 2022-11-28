@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, POST } from "unicourse";
 import type { Token } from "@unicourse-tw/token";
 import { sign } from "@unicourse-tw/token";
 import { v } from "@unicourse-tw/validation";
@@ -83,7 +84,7 @@ router.post("/login", async ctx => {
     });
 
     const jwt_token = sign(token);
-    ctx.ok({ token: jwt_token });
+    ctx.ok<EndpointResponseBody<"auth/login", typeof POST>>({ token: jwt_token });
 });
 
 export default router;

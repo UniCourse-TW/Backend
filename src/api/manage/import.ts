@@ -1,5 +1,6 @@
 import type { PackedCourse, PackedEntity, PackedProgram, PackedTeacher } from "course-pack";
 import { verify as verify_course_pack } from "course-pack";
+import type { EndpointResponseBody, POST } from "unicourse";
 import cuid from "cuid";
 import type { Entity } from "@unicourse-tw/prisma";
 import UniRouter from "@/router";
@@ -146,7 +147,7 @@ router.post("/", async ctx => {
         }
     }
 
-    ctx.ok({
+    ctx.ok<EndpointResponseBody<"manage/import", typeof POST>>({
         teachers: [...(teachers.values())],
         programs: [...(programs.values())],
         courses: [...(courses.values())]

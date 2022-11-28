@@ -3,6 +3,7 @@ import body from "koa-bodyparser";
 import UniRouter from "@/router";
 import { catcher, create_guard, parse_token, wrap_response } from "@/middlewares";
 import health from "@/api/health";
+import stats from "@/api/stats";
 import test from "@/api/test";
 import courses from "@/api/courses";
 import auth from "@/api/auth";
@@ -13,6 +14,7 @@ import me from "@/api/me";
 
 const router = new UniRouter()
     .use("/health", health.routes())
+    .use("/stats", stats.routes())
     .use("/test", test.routes())
     .use("/auth", auth.routes())
     .use("/courses", create_guard(["verified"]), courses.routes())

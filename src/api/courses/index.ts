@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, GET } from "unicourse";
 import { SearchError, default_course_search } from "@unicourse-tw/course-search";
 import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
@@ -29,7 +30,7 @@ router.get("/", async ctx => {
         });
         log("searching courses done", courses.length);
 
-        ctx.ok(courses);
+        ctx.ok<EndpointResponseBody<"courses", typeof GET>>(courses);
     } catch (error) {
         if (error instanceof SearchError) {
             ctx.err(error.message, { code: 400 });

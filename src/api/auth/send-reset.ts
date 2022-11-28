@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, POST } from "unicourse";
 import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import UniRouter from "@/router";
@@ -25,7 +26,7 @@ router.post("/send-reset", async ctx => {
 
     try {
         await request_password_reset(snapshot.user_id);
-        ctx.ok({ email });
+        ctx.ok<EndpointResponseBody<"auth/send-reset", typeof POST>>({ email });
     } catch (err) {
         if (err instanceof KnownError) {
             ctx.err(err.message, { code: 400 });

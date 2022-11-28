@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, GET } from "unicourse";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
 import { get_version } from "@/utils";
@@ -8,7 +9,7 @@ router.get("/", async ctx => {
     try {
         await prisma.$connect();
 
-        ctx.ok({
+        ctx.ok<EndpointResponseBody<"health", typeof GET>>({
             server: "ok",
             database: "ok",
             version: get_version()

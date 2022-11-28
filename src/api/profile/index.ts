@@ -1,4 +1,5 @@
 import { v } from "@unicourse-tw/validation";
+import type { EndpointResponseBody, GET, PATCH } from "unicourse";
 import { z } from "zod";
 import debug from "@/debug";
 import UniRouter from "@/router";
@@ -34,7 +35,7 @@ router.get("/:username", async ctx => {
         profile.school = "";
     }
 
-    ctx.ok(profile);
+    ctx.ok<EndpointResponseBody<`profile/${string}`, typeof GET>>(profile);
 });
 
 router.patch("/:username", async ctx => {
@@ -84,7 +85,7 @@ router.patch("/:username", async ctx => {
         }
     });
 
-    ctx.ok(profile);
+    ctx.ok<EndpointResponseBody<`profile/${string}`, typeof PATCH>>(profile);
 });
 
 export default router;

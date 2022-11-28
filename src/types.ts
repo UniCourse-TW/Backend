@@ -7,6 +7,6 @@ export interface UniState extends DefaultStateExtends {
 }
 
 export interface UniContext extends DefaultContextExtends {
-    ok: (data: any) => void
+    ok: <T>(data: T) => void
     err: (error: string, extra?: { code?: number; data?: any }) => void
 }

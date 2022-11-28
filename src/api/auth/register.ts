@@ -1,3 +1,4 @@
+import type { EndpointResponseBody, POST } from "unicourse";
 import { v } from "@unicourse-tw/validation";
 import { z } from "zod";
 import argon from "argon2";
@@ -91,7 +92,7 @@ router.post("/register", async ctx => {
         }
     });
 
-    ctx.ok({ username, email });
+    ctx.ok<EndpointResponseBody<"auth/register", typeof POST>>({ username, email });
     send_verification_email(snapshot.email_id).catch(err => {
         log("Failed to send verification email: %O", err);
     });
