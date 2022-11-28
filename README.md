@@ -1,87 +1,88 @@
+<br />
+<div align="center">
+
 # 🦄 UniCourse Backend
 
-🦄 The backend of UniCourse, an open-sourced modern course platform for students.
+🦄 UniCourse is an open-sourced modern course platform for students.
 
-## Development
+</div>
 
-Please make sure you have installed [`Docker`](https://docs.docker.com/get-docker/) on your machine.
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Tabel of Contents</summary>
 
-Then copy the `.env.example` file to `.env` and fill in the environment variables.
+- [🦄 UniCourse Backend](#-unicourse-backend)
+  - [Features](#features)
+    - [Course Search](#course-search)
+    - [Forum System](#forum-system)
+  - [Usage](#usage)
+    - [Using Docker](#using-docker)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-### Setup
+</details>
 
-> There is a script to help you setup and do the following steps automatically:
-> `./scripts/fast-setup.sh`
+## Features
 
-Start the development environment:
+### Course Search
 
-```sh
-# on your computer
-docker compose up dev -d
+UniCourse builds up a scalable system for three factors (course, teacher, provider) search.
+
+### Forum System
+
+UniCourse provides a forum system for students to discuss about the topics related or unrelated to the courses, giving them a place to share their experience or ask for help.
+
+## Usage
+
+### Using Docker
+
+We provide pre-built docker images, you can pull them from `ghcr.io/unicourse-tw/backend`.
+
+However, you need to provide a [`.env`](./.env) and a database.
+
+In the first time, you need to shape the database schema.
+
+<details>
+<summary>Example: Docker Compose</summary>
+
+```yml
+# docker-compose.yml
+version: "3.9"
+name: UniCourse
+
+services:
+  backend:
+    image: ghcr.io/unicourse-tw/backend:latest
+    container_name: unicourse
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: unicourse-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data: {}
 ```
 
-Enter the development environment:
-
-```sh
-# on your computer
-docker compose exec dev bash
-```
-
-Then you may need to install the dependencies at the first time:
-
-```sh
-# in the development environment
-pnpm i
-```
-
-Build the packages:
-
-```sh
-# in the development environment
-pnpm build:all
-```
-
-Shape the database:
-
-```sh
-pnpm db:push
-```
-
-### Run in Development Mode
-
-```sh
-# in the development environment
-pnpm dev
-```
-
-### Load Data into Database
-
-You need to prepare Course Pack files first.
-
-Then load the data into database via `unicourse import`
-
-```sh
-# in the development environment
-unicourse import data/courses.json
-```
-
-> This action requires a logged-in user.
-
-### Run in Production Mode
-
-> First, get out of the development environment.
-
-```sh
-# on your computer
-docker compose up backend -d
-```
+</details>
 
 ## Contributing
 
-Any forms of contribution are welcome. Include but not limited to:
+You can find the contributing guidelines [here](./CONTRIBUTING.md).
 
-1. [Open a PR](https://github.com/UniCourse-TW/Backend/compare) to fix bugs.
-2. Check whether [issues](https://github.com/UniCourse-TW/Backend/issues) are still valid in current version.
-3. Add missing tests. (check [#16](https://github.com/UniCourse-TW/Backend/issues/16) for more discussion)
+## License
 
-If you need to any help from maintainers, you can join our [Discord server](https://discord.gg/aDUjjDf3yZ).
+UniCourse Backend is licensed under the [MIT License](./LICENSE.md).
