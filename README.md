@@ -75,3 +75,13 @@ unicourse import data/courses.json
 # on your computer
 docker compose up backend -d
 ```
+
+## Contributing
+
+Any forms of contribution are welcome. Include but not limited to:
+
+1. [Open a PR](https://github.com/UniCourse-TW/Backend/compare) to fix bugs.
+2. Check whether [issues](https://github.com/UniCourse-TW/Backend/issues) are still valid in current version.
+3. Add missing tests. (check [#16](https://github.com/UniCourse-TW/Backend/issues/16) for more discussion)
+
+If you need to any help from maintainers, you can join our [Discord server](https://discord.gg/aDUjjDf3yZ).
