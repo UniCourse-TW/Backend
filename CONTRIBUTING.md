@@ -89,7 +89,7 @@ We recommend you to use [VSCode](https://code.visualstudio.com/) as your editor 
 
 ## Commit Style
 
-We recommend you to use [Conventional Commits](https://www.conventionalcommits.or/) with Angular convention. If you do not follow this convention, we may squash your commits into one commit with a conventional commit message.
+We recommend you to use [Conventional Commits](https://www.conventionalcommits.org/) with Angular convention. If you do not follow this convention, we may squash your commits into one commit with a conventional commit message.
 
 ## Stacks
 
