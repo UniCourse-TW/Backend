@@ -273,7 +273,9 @@ export type EndpointTree = {
     manage: {
         import: {
             [POST]: [
-                CoursePack,
+                CoursePack & {
+                    scope?: string
+                },
                 {
                     teachers: string[]
                     courses: string[]
