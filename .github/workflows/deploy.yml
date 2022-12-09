@@ -16,9 +16,9 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: ${{ secret.SSH_HOST }}
-          username: ${{ secret.SSH_USER }}
-          key: ${{ secret.SSH_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             cd unicourse-deploy
             ./update.sh
