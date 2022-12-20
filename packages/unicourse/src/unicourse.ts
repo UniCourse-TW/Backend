@@ -46,6 +46,7 @@ export class UniCourse {
         this._raw_token = token;
         const result = decode<{
             user: string
+            username: string
             traits: string[]
             iat: number
             exp: number
@@ -53,7 +54,8 @@ export class UniCourse {
         }>(token);
         this.token = {
             token: result.jti,
-            username: result.user,
+            user: result.user,
+            username: result.username,
             expires: result.exp,
             traits: result.traits
         };
