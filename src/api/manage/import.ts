@@ -41,6 +41,8 @@ router.post("/", async ctx => {
     } catch (err) {
         if (err instanceof Error) {
             ctx.err(err.message, { code: 400 });
+        } else {
+            throw err;
         }
     }
 });
