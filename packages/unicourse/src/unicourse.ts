@@ -195,13 +195,18 @@ export class UniCourse {
         return this.req(`profile/${username}`);
     }
 
+    /**
+     * @param json The `CoursePack` to import.
+     * @param scope If specified, the importer will use scoped merge strategy with the given id.
+     */
     public async import(
-        json: CoursePack
+        json: CoursePack,
+        scope?: string
     ): Promise<EndpointResponseBody<"manage/import", typeof POST>> {
         const packed = verify_course_pack(json);
         return this.req("manage/import", {
             method: "POST",
-            body: packed
+            body: { ...packed, scope }
         });
     }
 }
