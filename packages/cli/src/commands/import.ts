@@ -9,12 +9,16 @@ const command = new Command("import")
     .description("Import course pack from a JSON file")
     .argument("<file>", "File path")
     .option("-s, --server <server>", "The server to log in to", config.server || defaults.server)
+    .option(
+        "--scope <entity>",
+        "If specified, the importer will use scoped merge strategy with the given id"
+    )
     .action(async (file: string, opt) => {
         const uni = new UniCourse(config.token, { server: opt.server });
 
         try {
             const json = JSON.parse(fs.readFileSync(file, "utf8"));
-            const result = await uni.import(json);
+            const result = await uni.import(json, opt.scope);
             for (const [key, value] of Object.entries(result)) {
                 console.log(chalk.cyan.bold(key), value.join(", "));
             }
