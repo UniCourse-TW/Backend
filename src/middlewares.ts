@@ -85,7 +85,8 @@ export async function catcher(ctx: Context, next: Next): Promise<void> {
     try {
         await next();
     } catch (err) {
-        if (err instanceof z.ZodError) {
+        if (err instanceof z.ZodError || (err instanceof Error && err.name === "ZodError")) {
+            // @ts-expect-error Validation re-exports ZodError, may not be correctly recognized
             Err(ctx, err.issues.map(i => i.message).join(", "), { code: 400 });
         } else if (err instanceof Error) {
             const id = cuid();
