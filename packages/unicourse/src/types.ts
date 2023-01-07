@@ -345,6 +345,29 @@ export type EndpointTree = {
             ]
         }
     }
+    tree: {
+        [GET]: [
+            { type: "course"; id: string },
+            Course & {
+                provider: Entity
+                teachers: Teacher[]
+            }
+        ] | [
+            { type: "entity"; id: string },
+            Entity & {
+                teachers: Teacher[]
+                courses: Course[]
+                parent: Entity | null
+                children: Entity[]
+            }
+        ] | [
+            { type: "teacher"; id: string },
+            Teacher & {
+                courses: Course[]
+                entities: Entity[]
+            }
+        ]
+    }
 };
 
 export type EndpointPath = PathBuilder<EndpointTree>;

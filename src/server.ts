@@ -11,6 +11,7 @@ import posts from "@/api/posts";
 import profile from "@/api/profile";
 import manage from "@/api/manage";
 import me from "@/api/me";
+import tree from "@/api/tree";
 
 const router = new UniRouter()
     .use("/health", health.routes())
@@ -21,7 +22,8 @@ const router = new UniRouter()
     .use("/posts", create_guard(["verified"]), posts.routes())
     .use("/profile", create_guard(), profile.routes())
     .use("/manage", create_guard(["moderator", "verified"]), manage.routes())
-    .use("/me", create_guard(), me.routes());
+    .use("/me", create_guard(), me.routes())
+    .use("/tree", create_guard(["verified"]), tree.routes());
 
 const server = new Koa()
     .use(catcher)

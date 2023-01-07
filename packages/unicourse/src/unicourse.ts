@@ -209,4 +209,14 @@ export class UniCourse {
             body: { ...packed, scope }
         });
     }
+
+    public async tree(option: {
+        type: "course" | "entity" | "teacher"
+        id: string
+    }): Promise<EndpointResponseBody<"tree">> {
+        return this.req("tree", {
+            method: "GET",
+            body: option
+        });
+    }
 }
