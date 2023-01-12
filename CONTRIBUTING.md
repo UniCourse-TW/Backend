@@ -21,65 +21,11 @@ If you need to any help from maintainers and the community, you can join our [Di
 
 ## Setting Up the Environment
 
+Before you start, you should copy the `.env.example` file to `.env` and fill in the environment variables.
+
 Please make sure you have installed [`Docker`](https://docs.docker.com/get-docker/) on your machine.
 
-We will create a docker container as the development environment:
-
-```sh
-┌───────────────────────────────────┐
-│                                   │
-│  Your Machine (Host)              │
-│                                   │
-│    `docker compose exec dev bash` │
-│       ↓                           │
-│  ┌───┤ ├────────────────┐         │
-│  │                      │         │
-│  │  Container (Dev Env) │         │
-│  │                      │         │
-│  └──────────────────────┘         │
-│                                   │
-└───────────────────────────────────┘
-```
-
-In the Dev Env, all the tools you need are already installed, such as `pnpm`, `prisma`, `tsx`, `unicourse`, etc.
-
-### First Time Setup
-
-Clone the repository:
-
-```sh
-# at Host
-git clone https://github.com/UniCourse-TW/Backend.git
-cd Backend
-```
-
-Run Setup Script:
-
-```sh
-# at Host
-./scripts/fast-setup.sh
-```
-
-> This should take a few minutes and only needs to be done once.
-> After the script finishes, you will be inside the Dev Env.
-
-### Start the Development Environment
-
-You may need to start the Dev Env if you have exited it:
-
-```sh
-# at Host
-docker compose up -d dev
-```
-
-### Enter the Development Environment
-
-Please ensure that you have started the Dev Env.
-
-```sh
-# at Host
-docker compose exec dev bash
-```
+We use **devcontainer** to provide a consistent development environment. You can use **VSCode** to open this repository and it will automatically build the devcontainer for you. (You should see a popup in the bottom right corner of your VSCode window.)
 
 ## Coding Style
 
