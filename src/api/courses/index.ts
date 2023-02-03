@@ -6,6 +6,7 @@ import key from "./key";
 import debug from "@/debug";
 import UniRouter from "@/router";
 import { prisma } from "@/prisma";
+import { create_guard } from "@/middlewares";
 
 const log = debug("api:course");
 const router = new UniRouter();
@@ -16,7 +17,7 @@ const query = z.object({
     limit: v.limit
 });
 
-router.get("/", async ctx => {
+router.get("/", create_guard(["verified"]), async ctx => {
     try {
         const { q, offset, limit } = query.parse(ctx.query);
 
