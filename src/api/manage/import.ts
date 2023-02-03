@@ -215,7 +215,6 @@ async function scoped_resolver(pack: CoursePack, scope: string): Promise<{
         ...down({
             include: {
                 courses: {
-                    select: {},
                     include: {
                         programs: {
                             select: { id: true, name: true }
