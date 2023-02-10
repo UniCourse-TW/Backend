@@ -13,5 +13,7 @@
     "@unicourse-tw/validation": "1.0.0-alpha.14",
     "unicourse-backend": "1.0.0-alpha.14"
   },
-  "changesets": []
+  "changesets": [
+    "ninety-tomatoes-fetch"
+  ]
 }
