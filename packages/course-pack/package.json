@@ -16,7 +16,6 @@
         "build": "tsup"
     },
     "dependencies": {
-        "@unicourse-tw/prisma": "workspace:*",
         "zod": "^3.19.1"
     },
     "devDependencies": {

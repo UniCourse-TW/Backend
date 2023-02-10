@@ -1,5 +1,4 @@
 import { ZodError, z } from "zod";
-import type { CourseType } from "@unicourse-tw/prisma";
 
 const teacher_schema = z.object({
     name: z.string().min(1).max(255),
@@ -22,7 +21,7 @@ const course_schema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().max(65535),
     code: z.string().max(255),
-    type: z.enum(["Compulsory", "Elective", "General", "Other"] as [CourseType, ...CourseType[]]),
+    type: z.enum(["Compulsory", "Elective", "General", "Other"] as const),
     credit: z.number().int().min(-1).max(999),
     extra: z.any().optional(),
     teachers: z.array(z.string().min(1).max(255)),
