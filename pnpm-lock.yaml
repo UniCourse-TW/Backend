@@ -125,9 +125,9 @@ importers:
       tsup: ^6.4.0
       zod: ^3.19.1
     dependencies:
-      '@unicourse-tw/prisma': link:../prisma
       zod: 3.19.1
     devDependencies:
+      '@unicourse-tw/prisma': link:../prisma
       tsup: 6.4.0
 
   packages/notify:
