@@ -19,7 +19,6 @@
         "zod": "^3.19.1"
     },
     "devDependencies": {
-        "@unicourse-tw/prisma": "workspace:*",
         "tsup": "^6.4.0"
     },
     "homepage": "https://github.com/UniCourse-TW/",
