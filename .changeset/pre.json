@@ -10,7 +10,8 @@
     "@unicourse-tw/course-search": "1.0.0-alpha.14",
     "@unicourse-tw/token": "1.0.0-alpha.14",
     "unicourse": "1.0.0-alpha.14",
-    "@unicourse-tw/validation": "1.0.0-alpha.14"
+    "@unicourse-tw/validation": "1.0.0-alpha.14",
+    "unicourse-backend": "1.0.0-alpha.14"
   },
   "changesets": []
 }
