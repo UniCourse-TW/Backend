@@ -147,10 +147,12 @@ importers:
     specifiers:
       '@prisma/client': ^4.5.0
       prisma: ^4.5.0
+      prisma-runtime: ^0.1.4
     dependencies:
       '@prisma/client': 4.5.0_prisma@4.5.0
     devDependencies:
       prisma: 4.5.0
+      prisma-runtime: 0.1.4
 
   packages/search:
     specifiers:
@@ -5427,6 +5429,12 @@ packages:
       '@jest/schemas': 29.0.0
       ansi-styles: 5.2.0
       react-is: 18.2.0
+    dev: true
+
+  /prisma-runtime/0.1.4:
+    resolution: {integrity: sha512-RPYT+8qyijGHPGBf8kzcvFIDExp7gXB4fth3/KR8wOXK25JwPOD7xY93SM3wcxT31GcmUXEtGTJgYmqHni2b9w==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /prisma/4.5.0:
