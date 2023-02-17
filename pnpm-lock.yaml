@@ -177,6 +177,7 @@ importers:
   packages/unicourse:
     specifiers:
       '@types/debug': ^4.1.7
+      '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
       course-pack: workspace:*
       cross-fetch: ^3.1.5
@@ -187,6 +188,7 @@ importers:
       typescript: ^4.8.4
       zod: ^3.19.1
     dependencies:
+      '@unicourse-tw/prisma': link:../prisma
       '@unicourse-tw/token': link:../token
       course-pack: link:../course-pack
       cross-fetch: 3.1.5
