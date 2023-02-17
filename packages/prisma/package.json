@@ -8,18 +8,20 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "files": [
-        "prisma"
+        "prisma",
+        "lib"
     ],
     "scripts": {
-        "postinstall": "npx -y prisma generate",
-        "build": "prisma generate",
+        "postinstall": "npx -y prisma generate || true",
+        "build": "prisma generate && prisma-runtime",
         "prisma": "prisma"
     },
     "dependencies": {
         "@prisma/client": "^4.5.0"
     },
     "devDependencies": {
-        "prisma": "^4.5.0"
+        "prisma": "^4.5.0",
+        "prisma-runtime": "^0.1.4"
     },
     "homepage": "https://github.com/UniCourse-TW/",
     "repository": {

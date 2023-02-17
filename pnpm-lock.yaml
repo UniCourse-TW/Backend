@@ -147,10 +147,12 @@ importers:
     specifiers:
       '@prisma/client': ^4.5.0
       prisma: ^4.5.0
+      prisma-runtime: ^0.1.4
     dependencies:
       '@prisma/client': 4.5.0_prisma@4.5.0
     devDependencies:
       prisma: 4.5.0
+      prisma-runtime: 0.1.4
 
   packages/search:
     specifiers:
@@ -175,6 +177,7 @@ importers:
   packages/unicourse:
     specifiers:
       '@types/debug': ^4.1.7
+      '@unicourse-tw/prisma': workspace:*
       '@unicourse-tw/token': workspace:*
       course-pack: workspace:*
       cross-fetch: ^3.1.5
@@ -185,6 +188,7 @@ importers:
       typescript: ^4.8.4
       zod: ^3.19.1
     dependencies:
+      '@unicourse-tw/prisma': link:../prisma
       '@unicourse-tw/token': link:../token
       course-pack: link:../course-pack
       cross-fetch: 3.1.5
@@ -5427,6 +5431,12 @@ packages:
       '@jest/schemas': 29.0.0
       ansi-styles: 5.2.0
       react-is: 18.2.0
+    dev: true
+
+  /prisma-runtime/0.1.4:
+    resolution: {integrity: sha512-RPYT+8qyijGHPGBf8kzcvFIDExp7gXB4fth3/KR8wOXK25JwPOD7xY93SM3wcxT31GcmUXEtGTJgYmqHni2b9w==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /prisma/4.5.0:
