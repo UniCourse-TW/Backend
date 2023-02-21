@@ -1,0 +1,15 @@
+{
+	"name": "unicourse-workspace",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "workspace",
+	"workspaceFolder": "/workspace",
+	"settings": {},
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"GitHub.copilot",
+		"GitHub.copilot-labs"
+	],
+	"onCreateCommand": "pnpm config -g set store-dir /workspace/node_modules/.pnpm-store",
+	"postCreateCommand": "pnpm i && pnpm build:all",
+	"postStartCommand": "pnpm i"
+}
