@@ -15,7 +15,15 @@ export function parse_query(q: string): Record<string, string[]> {
     const result: Record<string, string[]> = {};
 
     for (const match of matches) {
-        if (/[=:]/.test(match)) {
+        if (/^["\s]/.test(match) && /["\s]$/.test(match)) {
+            const stripped = match.replace(/^["\s]|["\s]$/g, "");
+
+            if ("_" in result) {
+                result._.push(stripped);
+            } else {
+                result._ = [stripped];
+            }
+        } else if (/[=:]/.test(match)) {
             const [key, value] = match.split(/[:=]/, 2);
             const stripped = value.replace(/^["\s]|["\s]$/g, "");
 
